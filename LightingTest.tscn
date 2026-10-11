@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://omrbmug2pw0e"]
+
+[ext_resource type="Texture2D" uid="uid://dbuigg3mkp5rj" path="res://Textures/FlashlightProjector.png" id="1_v7r5d"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_4ekg4"]
+flip_faces = true
+
+[node name="LightingTest" type="Node3D" unique_id=439247041]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1111405512]
+mesh = SubResource("BoxMesh_4ekg4")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="." unique_id=1665411839]
+light_projector = ExtResource("1_v7r5d")
+shadow_enabled = true
+spot_range = 10.0
