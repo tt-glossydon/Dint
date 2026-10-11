@@ -14,6 +14,10 @@ config/name="New Game Project"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
 
+[audio]
+
+buses/default_bus_layout="uid://b8wr0hwoqop4v"
+
 [display]
 
 window/stretch/mode="canvas_items"
@@ -26,3 +30,4 @@ window/stretch/aspect="expand"
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+lights_and_shadows/positional_shadow/atlas_size=8192

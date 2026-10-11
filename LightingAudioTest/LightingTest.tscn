@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://omrbmug2pw0e"]
+
+[ext_resource type="Texture2D" uid="uid://dbuigg3mkp5rj" path="res://Textures/FlashlightProjector.png" id="1_v7r5d"]
+[ext_resource type="AudioStream" uid="uid://dbhk26xruvyem" path="res://Audio/metal_shield_block.wav" id="2_y07pn"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_4ekg4"]
+flip_faces = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_6158t"]
+size = Vector3(0.15, 0.05, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4ekg4"]
+
+[node name="LightingTest" type="Node3D" unique_id=439247041]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1111405512]
+mesh = SubResource("BoxMesh_4ekg4")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="." unique_id=1665411839]
+light_projector = ExtResource("1_v7r5d")
+shadow_enabled = true
+shadow_blur = 0.1
+spot_range = 10.0
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=469563937]
+transform = Transform3D(0.4464649, 0.8921231, -0.06917712, -0.6978967, 0.39556065, 0.5970528, 0.5600083, -0.21828458, 0.7992137, 0, 0, -0.25068855)
+mesh = SubResource("BoxMesh_6158t")
+
+[node name="Area3D" type="Area3D" parent="." unique_id=1565623112]
+audio_bus_name = &"Reverb"
+reverb_bus_enabled = true
+reverb_bus_name = &"Reverb"
+reverb_bus_amount = 1.0
+reverb_bus_uniformity = 0.5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=1083893660]
+shape = SubResource("BoxShape3D_4ekg4")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=1165519411]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0.45, 0.45)
+stream = ExtResource("2_y07pn")
+max_db = -6.0
+bus = &"GameAudio"
+area_mask = 1
+attenuation_filter_cutoff_hz = 20500.0
