@@ -10,6 +10,13 @@ extends Node
 		#print("Failed to initialize Steam, shutting down: %s" % initialize_response)
 		# get_tree().quit()
 
+func _unhandled_input(event:InputEvent):
+	if event.is_action_pressed("toggle_fullscreen"):
+		if DisplayServer.window_get_mode() != DisplayServer.WINDOW_MODE_FULLSCREEN:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+		else:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	#initialize_steam()
