@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Dint"
-run/main_scene="uid://cgwpymmcpeh7t"
+run/main_scene="uid://bdp7my57prhol"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
 
