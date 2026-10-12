@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://cgwpymmcpeh7t"]
+
+[ext_resource type="PackedScene" uid="uid://clyv1thwucfq" path="res://CharacterController/dint_body_3d.tscn" id="1_0uj6t"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_wbj16"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_32sqt"]
+points = PackedVector3Array(-1, 0, -1, -1, 0, 1, 1, 0, -1, 1, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wbj16"]
+
+[node name="TestScene" type="Node3D" unique_id=548508274]
+
+[node name="DintBody3D" parent="." unique_id=1326745764 instance=ExtResource("1_0uj6t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.208097, 0)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1378518414]
+transform = Transform3D(131.13858, 0, 0, 0, 1.0000004, 0, 0, 0, 140.41013, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=1121199357]
+mesh = SubResource("PlaneMesh_wbj16")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=424434297]
+shape = SubResource("ConvexPolygonShape3D_32sqt")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=568343556]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 39.087547, 0)
+light_energy = 15.879
+omni_range = 133.814
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="." unique_id=1241950148]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D2" unique_id=1850027470]
+transform = Transform3D(2.580855, 0, 0, 0, 1, 0, 0, 0, 4.4545116, 7.092185, 0.04591441, 2.6003952)
+mesh = SubResource("BoxMesh_wbj16")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="StaticBody3D2" unique_id=1228996577]
+transform = Transform3D(2.580855, 0, 0, 0, 6.2698793, 0, 0, 0, 11.202797, -5.765211, 1.8307459, 2.6003952)
+mesh = SubResource("BoxMesh_wbj16")

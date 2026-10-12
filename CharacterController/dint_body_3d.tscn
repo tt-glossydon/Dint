@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://clyv1thwucfq"]
+
+[ext_resource type="Script" uid="uid://b8at2bnqvmkuq" path="res://CharacterController/dint_body_3d.gd" id="1_y64o8"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bc1g7"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_y64o8"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[node name="DintBody3D" type="CharacterBody3D" unique_id=1326745764]
+script = ExtResource("1_y64o8")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1200371737]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.61072886, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1280031334]
+shape = SubResource("CapsuleShape3D_bc1g7")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1108035483]
+replication_config = SubResource("SceneReplicationConfig_y64o8")
