@@ -77,3 +77,9 @@ move_sprint={
 
 rendering_device/driver.windows="d3d12"
 lights_and_shadows/positional_shadow/atlas_size=8192
+
+[steam]
+
+initialization/app_data/app_id=480
+initialization/processes/initialize_on_startup=true
+initialization/processes/embed_callbacks=true
