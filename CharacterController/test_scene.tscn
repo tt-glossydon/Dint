@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://cgwpymmcpeh7t"]
+
+[ext_resource type="PackedScene" uid="uid://clyv1thwucfq" path="res://CharacterController/character_controller.tscn" id="1_3s8s7"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_wbj16"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_32sqt"]
+points = PackedVector3Array(-1, 0, -1, -1, 0, 1, 1, 0, -1, 1, 0, 1)
+
+[node name="TestScene" type="Node3D" unique_id=548508274]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1378518414]
+transform = Transform3D(7.3676977, 0, 0, 0, 1.0000004, 0, 0, 0, 5.7088075, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=1121199357]
+mesh = SubResource("PlaneMesh_wbj16")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=424434297]
+shape = SubResource("ConvexPolygonShape3D_32sqt")
+
+[node name="CharacterController" parent="." unique_id=778927063 instance=ExtResource("1_3s8s7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2771829, 0)
