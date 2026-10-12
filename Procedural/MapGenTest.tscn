@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://ddlmwkr6vcact"]
+
+[ext_resource type="Script" uid="uid://b6ispbcfg6rrl" path="res://Procedural/map_gen_test.gd" id="1_tdkaq"]
+
+[node name="MapGenTest" type="Node3D" unique_id=888865811]
+script = ExtResource("1_tdkaq")
