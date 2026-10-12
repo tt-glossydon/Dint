@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://clyv1thwucfq"]
 
 [ext_resource type="Script" uid="uid://b8at2bnqvmkuq" path="res://CharacterController/dint_body_3d.gd" id="1_y64o8"]
+[ext_resource type="Texture2D" uid="uid://dbuigg3mkp5rj" path="res://Textures/FlashlightProjector.png" id="2_84rtu"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bc1g7"]
 
@@ -17,6 +18,17 @@ script = ExtResource("1_y64o8")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1200371737]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.61072886, 0)
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Camera3D" unique_id=1432049311]
+transform = Transform3D(0.9999756, 6.0922215e-05, 0.0069809943, 0, 0.9999619, -0.008726535, -0.00698126, 0.008726323, 0.99993753, 0.0636643, -0.083037555, 0.051683724)
+light_projector = ExtResource("2_84rtu")
+light_size = 0.3
+light_bake_mode = 0
+shadow_enabled = true
+shadow_bias = 0.07
+shadow_blur = 0.1
+spot_range = 10.0
+spot_attenuation = 0.3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1280031334]
 shape = SubResource("CapsuleShape3D_bc1g7")

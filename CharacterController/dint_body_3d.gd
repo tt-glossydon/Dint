@@ -56,7 +56,7 @@ func move(in_dir: Vector2, delta: float) -> void:
 	var acceleration := run_acceleration if running else walk_acceleration
 	
 	# The movement direction and speed
-	var direction := (transform.basis * Vector3(in_dir.x, 0, in_dir.y)).normalized()
+	var direction := (transform.basis * Vector3(in_dir.x, 0, in_dir.y))
 	var target := direction * max_speed
 	var rate := acceleration if direction != Vector3.ZERO else deceleration
 	
