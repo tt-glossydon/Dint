@@ -13,7 +13,7 @@ config_version=5
 config/name="Dint"
 run/main_scene="uid://bdp7my57prhol"
 config/features=PackedStringArray("4.7", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="uid://bei4yc1qe05va"
 
 [audio]
 
