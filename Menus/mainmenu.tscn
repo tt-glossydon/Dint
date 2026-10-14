@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://blv3vd48o6fna"]
+
+[ext_resource type="Script" uid="uid://dmm0cylcoi0ku" path="res://Menus/mainmenu.gd" id="1_w23qy"]
+
+[node name="Mainmenu" type="Control" unique_id=1603708398]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_w23qy")
+
+[node name="CreateServer2" type="Button" parent="." unique_id=1703293552]
+layout_mode = 0
+offset_left = 179.0
+offset_top = 80.0
+offset_right = 431.0
+offset_bottom = 308.0
+text = "Create Server Local"
+
+[node name="JoinServer2" type="Button" parent="." unique_id=1607391483]
+layout_mode = 0
+offset_left = 625.0
+offset_top = 48.0
+offset_right = 877.0
+offset_bottom = 276.0
+text = "Join Server Local"
+
+[node name="CreateServer" type="Button" parent="." unique_id=397647692]
+layout_mode = 0
+offset_left = 193.0
+offset_top = 388.0
+offset_right = 445.0
+offset_bottom = 616.0
+text = "Create Server"
+
+[node name="JoinServer" type="Button" parent="." unique_id=463705840]
+layout_mode = 0
+offset_left = 639.0
+offset_top = 356.0
+offset_right = 891.0
+offset_bottom = 584.0
+text = "Join Server"
+
+[connection signal="pressed" from="CreateServer2" to="." method="_on_create_server_2_pressed"]
+[connection signal="pressed" from="JoinServer2" to="." method="_on_join_server_2_pressed"]
+[connection signal="pressed" from="CreateServer" to="." method="_on_create_server_pressed"]
+[connection signal="pressed" from="JoinServer" to="." method="_on_join_server_pressed"]

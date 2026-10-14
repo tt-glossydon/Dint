@@ -12,6 +12,8 @@ properties/1/path = NodePath(".:rotation")
 properties/1/spawn = true
 properties/1/replication_mode = 1
 
+[sub_resource type="BoxMesh" id="BoxMesh_wbj16"]
+
 [node name="DintBody3D" type="CharacterBody3D" unique_id=1326745764]
 script = ExtResource("1_y64o8")
 
@@ -23,3 +25,6 @@ shape = SubResource("CapsuleShape3D_bc1g7")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1108035483]
 replication_config = SubResource("SceneReplicationConfig_y64o8")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2060810077]
+mesh = SubResource("BoxMesh_wbj16")

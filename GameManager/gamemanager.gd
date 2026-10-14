@@ -1,14 +1,8 @@
-extends Node
+extends Node3D
 
-#const STEAM_APP_ID = 480
+var lobby_id: int = -1
+var peer := SteamMultiplayerPeer.new()
 
-#func initialize_steam() -> void:
-	#var initialize_response: Dictionary = Steam.steamInitEx( STEAM_APP_ID, true )
-	#print("Did Steam initialize?: %s " % initialize_response)
-	#
-	#if initialize_response['status'] > Steam.STEAM_API_INIT_RESULT_OK:
-		#print("Failed to initialize Steam, shutting down: %s" % initialize_response)
-		# get_tree().quit()
 
 func _unhandled_input(event:InputEvent):
 	if event.is_action_pressed("toggle_fullscreen"):
@@ -19,9 +13,39 @@ func _unhandled_input(event:InputEvent):
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	#initialize_steam()
 	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+	
+@rpc("authority", "call_local", "reliable")
+func change_level(path: String) -> void:
+	get_tree().change_scene_to_file(path)
+	while get_tree().current_scene == null or get_tree().current_scene.scene_file_path != path:
+		await get_tree().process_frame
+	spawn_players()
+	
+func find_spawn_pos() -> Vector3:
+	for spawn in get_tree().get_nodes_in_group("spawns"):
+		if !spawn.used:
+			spawn.used = true
+			return spawn.position
+	
+	
+	return Vector3(0, 0, 0)
+
+@rpc("authority", "call_local", "reliable")
+func spawn_players():
+	var p_ids = [multiplayer.get_unique_id()]
+	p_ids.append_array(multiplayer.get_peers())
+	p_ids.sort()
+	var player_scene = preload("res://CharacterController/dint_body_3d.tscn")
+
+	for id in p_ids:
+		var player = player_scene.instantiate()
+		player.name = str(id)
+		player.position = find_spawn_pos()
+		player.set_multiplayer_authority(id)
+		add_child(player)
+		

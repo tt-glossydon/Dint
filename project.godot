@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Dint"
-run/main_scene="uid://cgwpymmcpeh7t"
+run/main_scene="uid://blv3vd48o6fna"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -21,7 +21,7 @@ buses/default_bus_layout="uid://b8wr0hwoqop4v"
 
 [autoload]
 
-Gamemanager="*uid://by58xlf3u8puo"
+Gamemanager="*uid://c0wmmqoimugnv"
 
 [debug]
 

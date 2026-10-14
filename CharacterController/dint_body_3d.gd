@@ -25,6 +25,12 @@ var running: bool = true
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	
+	camera.current = is_multiplayer_authority()
+	set_physics_process(is_multiplayer_authority())
+	set_process_unhandled_input(is_multiplayer_authority())
+	if is_multiplayer_authority():
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _physics_process(delta: float) -> void:
 	var input = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
