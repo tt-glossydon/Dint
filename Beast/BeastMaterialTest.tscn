@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://cqfh4u4k8qrg2"]
+
+[ext_resource type="PackedScene" uid="uid://dr0ypbeksw3hb" path="res://Beast/Beast.glb" id="1_mwrpd"]
+[ext_resource type="Material" uid="uid://duiftcnis553h" path="res://Beast/WardenBody.tres" id="2_fpd77"]
+
+[sub_resource type="Shader" id="Shader_ayw46"]
+code = "// NOTE: Shader automatically converted from Godot Engine 4.7.2.stable's StandardMaterial3D.
+
+shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert_wrap, specular_schlick_ggx;
+
+uniform vec4 albedo : source_color;
+uniform sampler2D texture_albedo : source_color, filter_linear_mipmap, repeat_enable;
+uniform ivec2 albedo_texture_size;
+uniform float point_size : hint_range(0.1, 128.0, 0.1);
+
+uniform float roughness : hint_range(0.0, 1.0);
+uniform sampler2D texture_metallic : hint_default_white, filter_linear_mipmap, repeat_enable;
+uniform vec4 metallic_texture_channel;
+uniform sampler2D texture_roughness : hint_roughness_r, filter_linear_mipmap, repeat_enable;
+
+uniform float specular : hint_range(0.0, 1.0, 0.01);
+uniform float metallic : hint_range(0.0, 1.0, 0.01);
+
+uniform vec3 uv1_scale;
+uniform vec3 uv1_offset;
+uniform vec3 uv2_scale;
+uniform vec3 uv2_offset;
+
+void vertex() {
+	UV = UV * uv1_scale.xy + uv1_offset.xy;
+}
+
+void fragment() {
+	vec2 base_uv = UV;
+
+	vec4 albedo_tex = texture(texture_albedo, base_uv);
+
+	// Vertex Color Use as Albedo: Enabled
+	albedo_tex *= COLOR;
+
+	ALBEDO = albedo.rgb * albedo_tex.rgb;
+
+	float metallic_tex = dot(texture(texture_metallic, base_uv), metallic_texture_channel);
+	METALLIC = metallic_tex * metallic;
+	SPECULAR = specular;
+
+	vec4 roughness_texture_channel = vec4(1.0, 0.0, 0.0, 0.0);
+	float roughness_tex = dot(texture(texture_roughness, base_uv), roughness_texture_channel);
+	ROUGHNESS = roughness_tex * roughness;
+}
+
+void light() {
+	// light we wish to accumulate
+	DIFFUSE_LIGHT += ALBEDO * ATTENUATION * LIGHT_COLOR * max(dot(LIGHT,NORMAL), 0.0);
+
+	// assign the result
+	SPECULAR_LIGHT = round(DIFFUSE_LIGHT*16.0 - 0.5)/16.0; // posterizes the final color
+	//SPECULAR_LIGHT = DIFFUSE_LIGHT; // do nothing to the result
+
+	// cancel all contribution of the diffuse_light variable
+	SPECULAR_LIGHT += ALBEDO * DIFFUSE_LIGHT;
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mwrpd"]
+render_priority = 0
+shader = SubResource("Shader_ayw46")
+shader_parameter/albedo = Color(1, 0, 0, 1)
+shader_parameter/albedo_texture_size = Vector2i(0, 0)
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 0.37
+shader_parameter/metallic_texture_channel = Vector4(1, 0, 0, 0)
+shader_parameter/specular = 0.3499999921768
+shader_parameter/metallic = 0.999999977648
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+
+[node name="Beast" unique_id=1874340249 instance=ExtResource("1_mwrpd")]
+
+[node name="zomboid1_LORES_001" parent="." index="0" unique_id=867256812]
+cast_shadow = 0
+lod_bias = 128.0
+surface_material_override/0 = ExtResource("2_fpd77")
+surface_material_override/1 = SubResource("ShaderMaterial_mwrpd")
