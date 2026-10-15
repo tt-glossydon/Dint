@@ -3,21 +3,12 @@ extends Node3D
 var lobby_id: int = -1
 var peer := SteamMultiplayerPeer.new()
 
-
 func _unhandled_input(event:InputEvent):
 	if event.is_action_pressed("toggle_fullscreen"):
 		if DisplayServer.window_get_mode() != DisplayServer.WINDOW_MODE_FULLSCREEN:
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 		else:
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
 	
 @rpc("authority", "call_local", "reliable")
 func change_level(path: String) -> void:

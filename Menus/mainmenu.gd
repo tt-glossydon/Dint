@@ -7,10 +7,6 @@ func _ready() -> void:
 	Steam.lobby_match_list.connect(_on_lobby_match_list)
 	Steam.lobby_joined.connect(_on_lobby_joined)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
 func _on_create_server_pressed() -> void:
 	if Gamemanager.lobby_id != -1:
 		if multiplayer.is_server():
@@ -61,18 +57,3 @@ func _on_lobby_joined(lobby_id: int, _permissions: int, _locked: bool, response:
 	Gamemanager.lobby_id = lobby_id
 	Gamemanager.peer.connect_to_lobby(lobby_id)
 	multiplayer.multiplayer_peer = Gamemanager.peer
-
-
-func _on_create_server_2_pressed() -> void:
-	if multiplayer.multiplayer_peer is ENetMultiplayerPeer:
-		Gamemanager.change_level.rpc("res://dtest.tscn")
-	else:
-		var p := ENetMultiplayerPeer.new()
-		p.create_server(9999, 3)
-		multiplayer.multiplayer_peer = p
-
-
-func _on_join_server_2_pressed() -> void:
-	var p := ENetMultiplayerPeer.new()
-	p.create_client("127.0.0.1", 9999)
-	multiplayer.multiplayer_peer = p
