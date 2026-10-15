@@ -87,6 +87,7 @@ bones/49/position = Vector3(-5.021435e-09, 0.0948497, 7.679844e-09)
 bones/49/rotation = Quaternion(-0.0029871708, 0.926128, -0.37719473, -0.0015451431)
 
 [node name="RixinBrigandineWrap_002" parent="Camera3D/ViewmodelDoodle/RixinGameRig/Skeleton3D" index="0" unique_id=1327805458]
+cast_shadow = 0
 blend_shapes/GripRight = 1.0
 blend_shapes/GripLeft = 0.89691
 blend_shapes/RestThumbLeft = 0.10309
@@ -123,6 +124,7 @@ transform = Transform3D(0.9995306, 0.0087232515, 0.029360384, -0.008881714, 0.99
 light_energy = 0.65
 light_volumetric_fog_energy = 0.5
 light_projector = ExtResource("2_84rtu")
+light_specular = 1.0
 light_bake_mode = 0
 shadow_enabled = true
 shadow_bias = 0.11
@@ -134,6 +136,7 @@ spot_angle_attenuation = 0.7578593
 
 [node name="SpotLight3D3" type="SpotLight3D" parent="Camera3D" unique_id=384195360]
 transform = Transform3D(0.9995306, 0.0087232515, 0.029360384, -0.008881714, 0.9999468, 0.0052725784, -0.029312968, -0.005530812, 0.99955493, 0.16466391, -0.34418362, -1.1969756)
+visible = false
 light_color = Color(1, 0.72866666, 0.26, 1)
 light_energy = 4.0
 light_volumetric_fog_energy = 0.1
@@ -149,9 +152,10 @@ spot_angle_attenuation = 3.4822025
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Camera3D" unique_id=353427473]
 light_energy = 0.05
-shadow_enabled = true
+light_specular = 0.0
 omni_range = 1.146
 omni_attenuation = 0.185
+omni_shadow_mode = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1280031334]
 shape = SubResource("CapsuleShape3D_bc1g7")

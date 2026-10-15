@@ -29,6 +29,8 @@ file_logging/enable_file_logging=true
 
 [display]
 
+window/size/initial_position_type=4
+window/size/sharp_corners=true
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
@@ -81,7 +83,22 @@ toggle_fullscreen={
 [rendering]
 
 rendering_device/driver.windows="d3d12"
-lights_and_shadows/positional_shadow/atlas_size=8192
+environment/ssao/quality=1
+environment/ssao/adaptive_target=0.25
+environment/ssao/blur_passes=1
+environment/ssao/fadeout_from=40.0
+environment/ssao/fadeout_to=64.0
+environment/ssil/quality=1
+environment/ssil/adaptive_target=0.25
+environment/ssil/blur_passes=2
+environment/ssil/fadeout_from=40.0
+environment/ssil/fadeout_to=64.0
+environment/glow/upscale_mode=0
+environment/volumetric_fog/volume_size=96
+environment/volumetric_fog/volume_depth=96
+environment/volumetric_fog/use_filter=0
+anti_aliasing/quality/screen_space_aa=2
+occlusion_culling/use_occlusion_culling=true
 
 [steam]
 

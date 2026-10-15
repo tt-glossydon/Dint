@@ -1,0 +1,15 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://dtkpdrx2j6rkj"]
+
+[ext_resource type="Texture2D" uid="uid://bro75s2uv81os" path="res://Beast/T_zomboid1_LORES_001_ALbedo.png" id="1_05516"]
+[ext_resource type="Texture2D" uid="uid://c5xl3sfqashl4" path="res://Beast/T_zomboid1_LORES_001_Emissive.png" id="2_gc20w"]
+[ext_resource type="Texture2D" uid="uid://dwhprql0eg0ts" path="res://Beast/T_zomboid1_LORES_001_Normal.png" id="3_n54ld"]
+[ext_resource type="Texture2D" uid="uid://ce4aj86e2dxb8" path="res://Beast/T_zomboid1_LORES_001_Roughness.png" id="4_nf3yg"]
+
+[resource]
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_05516")
+roughness_texture = ExtResource("4_nf3yg")
+emission_enabled = true
+emission_texture = ExtResource("2_gc20w")
+normal_enabled = true
+normal_texture = ExtResource("3_n54ld")
