@@ -6,8 +6,8 @@ extends Control
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float)  -> void:
+	# Map hud/hand camera to controllable/word camera
 	ui_camera.global_transform = player_camera.global_transform
 	ui_camera.fov = player_camera.fov
 	ui_camera.near = player_camera.near
 	ui_camera.far = player_camera.far
-	

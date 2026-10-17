@@ -20,13 +20,32 @@ extends CharacterBody3D
 @export var run_acceleration: float = 70.0
 ## The rate at which the player will slow down while still
 @export var deceleration: float = 48.0
+## The strength the player jumps
+@export var jump_strength: float = 4.4
+## The divisor of the in air acceleration (air control)
+@export var air_acceleration_div: float = 4.0
 
 # Is the player running/sprinting
 var running: bool = true
 
+@export_group("View Bob")
+## Speed of the view bob
+@export var bob_frequency: float = 2.0
+
+## Height/Intensity of the view bob
+@export var bob_up_amplitude: float = 0.01
+@export var bob_side_amplitude: float = 0.03
+@export var bob_return_strength: float = 8.0
+# The current view bob amount/delta
+var bob_amount: float = 0.0
+# The starting position of the camera
+@onready var camera_start_pos = $Camera3D.position
+
+@onready var viewmodel_base = $Camera3D/ViewmodelDoodle
+@onready var viewmodel = $Camera3D/ViewmodelDoodle/RixinGameRig
+
 func _ready() -> void:
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	
+	# Setup for local client
 	camera.current = is_multiplayer_authority()
 	ui.ui_camera.current = is_multiplayer_authority()
 	set_physics_process(is_multiplayer_authority())
@@ -47,6 +66,15 @@ func _physics_process(delta: float) -> void:
 		Input.get_joy_axis(0, JOY_AXIS_RIGHT_Y)) * sensitivity * 40.0)
 	
 	move_and_slide()
+	
+	# View bob
+	if is_on_floor() && velocity.length() > 0.1:
+		bob_amount += delta * velocity.length() * float(is_on_floor())
+		camera.position += view_bob(bob_amount)
+		viewmodel.global_position = viewmodel_base.global_position - view_bob(bob_amount)
+	else:
+		camera.position = camera.position.lerp(camera_start_pos, delta * bob_return_strength)
+		viewmodel.global_position = viewmodel.global_position.lerp(viewmodel_base.global_position, delta * bob_return_strength)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
@@ -56,12 +84,16 @@ func _unhandled_input(event: InputEvent) -> void:
 		running = false
 	elif event.is_action_released("move_sprint"):
 		running = true
+		
+	if event.is_action_pressed("move_jump") && is_on_floor():
+		velocity.y = jump_strength
 
 ## Move the player in a 2d direction vector and a given delta time
 func move(in_dir: Vector2, delta: float) -> void:
 	# Running or walking
 	var max_speed := max_run_input_speed if running else max_walk_input_speed
 	var acceleration := run_acceleration if running else walk_acceleration
+	acceleration = acceleration if is_on_floor() else acceleration / air_acceleration_div
 	
 	# The movement direction and speed
 	var direction := (transform.basis * Vector3(in_dir.x, 0, in_dir.y))
@@ -84,3 +116,10 @@ func mouse_rotate(rot: Vector2) -> void:
 		camera.rotation.x, 
 		deg_to_rad(-pitch_clamp_angle), 
 		deg_to_rad(pitch_clamp_angle))
+
+## Returns a bob position based on the bob time
+func view_bob(time: float) -> Vector3:
+	var pos = Vector3.ZERO
+	pos.y = sin(time * bob_frequency) * bob_up_amplitude
+	pos.x = cos(time * (bob_frequency / 2.0)) * (bob_side_amplitude / 2.0)
+	return pos

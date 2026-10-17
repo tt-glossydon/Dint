@@ -1,12 +1,13 @@
 extends Control
 
 
-# Called when the node enters the scene tree for the first time.
+## Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Steam.lobby_created.connect(_on_lobby_created)
 	Steam.lobby_match_list.connect(_on_lobby_match_list)
 	Steam.lobby_joined.connect(_on_lobby_joined)
 
+## Call the lobby to be created
 func _on_create_server_pressed() -> void:
 	if Gamemanager.lobby_id != -1:
 		if multiplayer.is_server():
@@ -15,11 +16,12 @@ func _on_create_server_pressed() -> void:
 		var lobby_type: Steam.LobbyType = Steam.LobbyType.LOBBY_TYPE_PUBLIC
 		Steam.createLobby(lobby_type, 3)
 
-
+## Call a refreshing of the lobby list
 func _on_join_server_pressed() -> void:
 	Steam.addRequestLobbyListStringFilter("is_dint", "you know it", Steam.LOBBY_COMPARISON_EQUAL)
 	Steam.requestLobbyList()
 
+## Called by Steam when a lobby is created
 func _on_lobby_created(connect_status: Steam.Result, lobby_id: int) -> void:
 	if connect_status == Steam.Result.RESULT_OK:
 		# Set the lobby ID in our global script (if using one)
@@ -39,6 +41,7 @@ func _on_lobby_created(connect_status: Steam.Result, lobby_id: int) -> void:
 	else:
 		printerr("Failed to create a lobby: %s" % connect_status)
 
+## Called by Steam when the lobby list is polled
 func _on_lobby_match_list(these_lobbies: Array) -> void:
 	if these_lobbies.size() == 0:
 		print("No lobbies were found")
@@ -46,6 +49,7 @@ func _on_lobby_match_list(these_lobbies: Array) -> void:
 
 	Steam.joinLobby(these_lobbies[0])
 
+## Called by steam when a lobby is joined
 func _on_lobby_joined(lobby_id: int, _permissions: int, _locked: bool, response: int) -> void:
 	if Steam.getLobbyOwner(lobby_id) == Steam.getSteamID():
 		return

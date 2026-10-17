@@ -2,6 +2,19 @@
 
 [ext_resource type="PackedScene" uid="uid://ddo56j5jytdj2" path="res://PlayerSpawn/spawn_point.tscn" id="1_0uj6t"]
 
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0uj6t"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+energy_multiplier = 0.0
+
+[sub_resource type="Sky" id="Sky_56ri3"]
+sky_material = SubResource("ProceduralSkyMaterial_0uj6t")
+
+[sub_resource type="Environment" id="Environment_y0y32"]
+background_mode = 2
+sky = SubResource("Sky_56ri3")
+glow_enabled = true
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_wbj16"]
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_32sqt"]
@@ -10,6 +23,9 @@ points = PackedVector3Array(-1, 0, -1, -1, 0, 1, 1, 0, -1, 1, 0, 1)
 [sub_resource type="BoxMesh" id="BoxMesh_wbj16"]
 
 [node name="TestScene" type="Node3D" unique_id=548508274]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=97403618]
+environment = SubResource("Environment_y0y32")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1378518414]
 transform = Transform3D(131.13858, 0, 0, 0, 1.0000004, 0, 0, 0, 140.41013, 0, 0, 0)
@@ -22,6 +38,7 @@ shape = SubResource("ConvexPolygonShape3D_32sqt")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=568343556]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 39.087547, 0)
+visible = false
 layers = 3
 light_energy = 15.879
 omni_range = 133.814

@@ -24,11 +24,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.61072886, 0)
 cull_mask = 1048573
 
 [node name="ViewmodelDoodle" parent="Camera3D" unique_id=586864424 instance=ExtResource("2_mk8xa")]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, -2.2888126, 0)
+transform = Transform3D(-1, 0, 1.509958e-07, 0, 1, 0, -1.509958e-07, 0, -1, 0, -2.2888126, 0)
+
+[node name="SpotLight3D4" type="SpotLight3D" parent="Camera3D/ViewmodelDoodle" unique_id=100325224]
+transform = Transform3D(-1, 8.064567e-08, -1.2765582e-07, 0, 0.84542626, 0.5340921, 1.509958e-07, 0.5340921, -0.84542626, -7.3976835e-08, 2.6139688, -0.48992646)
+layers = 2
+light_energy = 1.4
+spot_range = 2.028
+spot_angle = 29.68
 
 [node name="Skeleton3D" parent="Camera3D/ViewmodelDoodle/RixinGameRig" parent_id_path=PackedInt32Array(586864424, 170382029) index="0" unique_id=2066586442]
-bones/0/position = Vector3(7.85804e-14, 1.0587417, -0.07851372)
-bones/0/rotation = Quaternion(0.09378668, -3.9514395e-14, 1.6985541e-13, 0.9955924)
+bones/0/position = Vector3(7.85804e-14, 1.0674006, -0.067994446)
+bones/0/rotation = Quaternion(0.09290869, -3.9364592e-14, 1.6989008e-13, 0.99567467)
 bones/9/position = Vector3(0.026697896, 0.06678154, 0.06388394)
 bones/9/rotation = Quaternion(-0.3265343, 0.61486083, 0.63417035, 0.33637694)
 bones/10/rotation = Quaternion(0.20973787, -0.6289255, 0.3379106, 0.66804135)
@@ -61,30 +68,30 @@ bones/30/position = Vector3(0.017257053, 0.07010508, 0.026500884)
 bones/30/rotation = Quaternion(0.4484915, 0.6728127, 0.5389576, 0.2360151)
 bones/31/rotation = Quaternion(0.17876458, 0.00014956165, -0.00039127067, 0.9838918)
 bones/33/rotation = Quaternion(-0.004393872, -0.014502544, 0.9569395, -0.28989166)
-bones/36/position = Vector3(2.3895976e-07, 1.0587415, -0.0785138)
-bones/36/rotation = Quaternion(-0.17892063, 0.7072929, 0.41252142, 0.5454818)
-bones/37/position = Vector3(-2.3895976e-07, 1.0587415, -0.0785138)
-bones/37/rotation = Quaternion(-0.17892063, -0.7072929, -0.4125214, 0.5454818)
-bones/38/position = Vector3(0.16032085, 1.1350393, -0.025510317)
-bones/38/rotation = Quaternion(0.99541026, -0.0017596029, -0.0334464, 0.08964816)
+bones/36/position = Vector3(2.1663155e-07, 1.0674003, -0.06799456)
+bones/36/rotation = Quaternion(-0.17940153, 0.70765644, 0.4118975, 0.54532385)
+bones/37/position = Vector3(-2.1663155e-07, 1.0674003, -0.06799456)
+bones/37/rotation = Quaternion(-0.17940158, -0.70765644, -0.41189748, 0.5453238)
+bones/38/position = Vector3(0.16032086, 1.1438947, -0.015274292)
+bones/38/rotation = Quaternion(0.9972837, -0.0021987334, -0.03342966, 0.0655975)
 bones/39/position = Vector3(-1.6763808e-08, 0.26612136, 3.72529e-08)
 bones/40/position = Vector3(2.6775528e-08, 0.2661214, 1.4320184e-08)
-bones/40/rotation = Quaternion(0.16357306, -3.5160843e-05, 5.8231185e-06, 0.9865313)
+bones/40/rotation = Quaternion(0.124795094, 3.2742356e-08, -3.523582e-08, 0.9921826)
 bones/41/position = Vector3(1.2805668e-09, 0.25289333, 1.11758744e-08)
 bones/41/rotation = Quaternion(-4.1909463e-09, 1.374865e-07, -5.3318207e-08, 1)
 bones/42/position = Vector3(5.912451e-09, 0.25289333, 3.862773e-09)
-bones/42/rotation = Quaternion(-0.41958648, 0.036299706, 0.0056065596, 0.90697193)
+bones/42/rotation = Quaternion(-0.40555927, 0.03625457, 0.0065461933, 0.9133261)
 bones/43/position = Vector3(7.0490387e-09, 0.09484969, 2.7640091e-08)
 bones/43/rotation = Quaternion(0.0029871673, 0.926128, -0.37719473, 0.0015451526)
-bones/44/position = Vector3(-0.16032085, 1.1350393, -0.025510317)
-bones/44/rotation = Quaternion(0.99541026, 0.0017596036, 0.03344641, 0.08964816)
+bones/44/position = Vector3(-0.16032086, 1.1438947, -0.015274292)
+bones/44/rotation = Quaternion(0.9972837, 0.0021987327, 0.033429656, 0.0655975)
 bones/45/position = Vector3(1.047745e-09, 0.26612148, 3.7252907e-08)
 bones/46/position = Vector3(1.8626455e-08, 0.2661214, -1.6396e-08)
-bones/46/rotation = Quaternion(0.16357306, 3.5161032e-05, -5.8235923e-06, 0.9865313)
+bones/46/rotation = Quaternion(0.124795094, -2.9449737e-08, 3.471129e-08, 0.9921826)
 bones/47/position = Vector3(2.9336666e-08, 0.2528934, 1.1175883e-08)
 bones/47/rotation = Quaternion(-6.0274054e-08, -1.3990217e-07, 5.401672e-08, 1)
 bones/48/position = Vector3(3.3979962e-08, 0.2528934, 6.29647e-08)
-bones/48/rotation = Quaternion(-0.41958648, -0.03629971, -0.00560656, 0.906972)
+bones/48/rotation = Quaternion(-0.40555918, -0.03625456, -0.006546189, 0.9133261)
 bones/49/position = Vector3(-5.021435e-09, 0.0948497, 7.679844e-09)
 bones/49/rotation = Quaternion(-0.0029871708, 0.926128, -0.37719473, -0.0015451431)
 
@@ -96,7 +103,7 @@ blend_shapes/GripLeft = 0.89691
 blend_shapes/RestThumbLeft = 0.10309
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="Camera3D/ViewmodelDoodle/RixinGameRig/Skeleton3D" index="1" unique_id=153476695]
-transform = Transform3D(-0.9750445, -0.22183722, -0.008723259, -0.007278651, -0.0073284805, 0.9999468, -0.2218892, 0.9750561, 0.005530849, -0.18967922, 1.9463384, 0.84847504)
+transform = Transform3D(-0.9750445, -0.22183722, -0.008723259, -0.0076699853, -0.005608827, 0.99995494, -0.221876, 0.97506726, 0.0037672967, -0.18967922, 1.9566307, 0.85742736)
 bone_name = "DEF-hand.R"
 bone_idx = 14
 
@@ -108,7 +115,7 @@ remote_path = NodePath("../../../../../SpotLight3D2")
 transform = Transform3D(0.96814764, 0, 0.25038, 0.25038, -3.7252903e-08, -0.96814764, 0, 1, -4.371139e-08, -0.10170728, 0.33427078, -1.1641532e-10)
 remote_path = NodePath("../../../../../SpotLight3D3")
 
-[node name="AnimationPlayer" parent="Camera3D/ViewmodelDoodle" index="1" unique_id=34816507]
+[node name="AnimationPlayer" parent="Camera3D/ViewmodelDoodle" index="2" unique_id=34816507]
 autoplay = &"gn_gernidol"
 
 [node name="SpotLight3D" type="SpotLight3D" parent="Camera3D" unique_id=1432049311]
@@ -123,7 +130,7 @@ spot_range = 16.0
 spot_attenuation = 0.2
 
 [node name="SpotLight3D2" type="SpotLight3D" parent="Camera3D" unique_id=2029152839]
-transform = Transform3D(0.9995306, 0.0087232515, 0.029360384, -0.008881714, 0.9999468, 0.0052725784, -0.029312968, -0.005530812, 0.99955493, 0.16466391, -0.34418362, -1.1969756)
+transform = Transform3D(0.9995306, 0.0087232515, 0.02936031, -0.0088300165, 0.99995494, 0.003509718, -0.029328465, -0.003767259, 0.9995624, 0.16466399, -0.33327672, -1.2059302)
 light_energy = 0.65
 light_volumetric_fog_energy = 0.5
 light_projector = ExtResource("2_84rtu")
@@ -138,7 +145,7 @@ spot_angle = 35.0
 spot_angle_attenuation = 0.7578593
 
 [node name="SpotLight3D3" type="SpotLight3D" parent="Camera3D" unique_id=384195360]
-transform = Transform3D(0.9995306, 0.0087232515, 0.029360384, -0.008881714, 0.9999468, 0.0052725784, -0.029312968, -0.005530812, 0.99955493, 0.16466391, -0.34418362, -1.1969756)
+transform = Transform3D(0.9995306, 0.0087232515, 0.02936031, -0.0088300165, 0.99995494, 0.003509718, -0.029328465, -0.003767259, 0.9995624, 0.16466399, -0.33327672, -1.2059302)
 visible = false
 light_color = Color(1, 0.72866666, 0.26, 1)
 light_energy = 4.0
@@ -168,5 +175,7 @@ replication_config = SubResource("SceneReplicationConfig_y64o8")
 
 [node name="DintHud" parent="." unique_id=1774359308 node_paths=PackedStringArray("player_camera") instance=ExtResource("5_wnc1q")]
 player_camera = NodePath("../Camera3D")
+
+[node name="Hand" type="Node3D" parent="." unique_id=1209924830]
 
 [editable path="Camera3D/ViewmodelDoodle"]
