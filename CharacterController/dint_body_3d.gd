@@ -12,8 +12,8 @@ extends CharacterBody3D
 @export_group("Movement")
 ## The speed while walking where inputs stop being added
 @export var max_walk_input_speed: float = 4.0
-## The speed while running where inputs stop being added
-@export var max_run_input_speed: float = 8.0
+## The speed where inputs stop being added
+@export var max_input_speed: float = 8.0
 ## The rate at which the player will speed up while walking
 @export var walk_acceleration: float = 36.0
 ## The rate at which the player will speed up while running
@@ -25,8 +25,8 @@ extends CharacterBody3D
 ## The divisor of the in air acceleration (air control)
 @export var air_acceleration_div: float = 4.0
 
-# Is the player running/sprinting
-var running: bool = true
+# Is the player walking
+var walking: bool = false
 
 @export_group("View Bob")
 ## Speed of the view bob
@@ -80,10 +80,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		mouse_rotate(event.relative * sensitivity)
 	
-	if event.is_action_pressed("move_sprint"):
-		running = false
-	elif event.is_action_released("move_sprint"):
-		running = true
+	if event.is_action_pressed("move_walk"):
+		walking = true
+	elif event.is_action_released("move_walk"):
+		walking = false
 		
 	if event.is_action_pressed("move_jump") && is_on_floor():
 		velocity.y = jump_strength
@@ -91,8 +91,8 @@ func _unhandled_input(event: InputEvent) -> void:
 ## Move the player in a 2d direction vector and a given delta time
 func move(in_dir: Vector2, delta: float) -> void:
 	# Running or walking
-	var max_speed := max_run_input_speed if running else max_walk_input_speed
-	var acceleration := run_acceleration if running else walk_acceleration
+	var max_speed := max_walk_input_speed if walking else max_input_speed
+	var acceleration := run_acceleration if walking else walk_acceleration
 	acceleration = acceleration if is_on_floor() else acceleration / air_acceleration_div
 	
 	# The movement direction and speed

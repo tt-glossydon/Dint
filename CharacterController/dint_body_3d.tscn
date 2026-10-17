@@ -26,13 +26,6 @@ cull_mask = 1048573
 [node name="ViewmodelDoodle" parent="Camera3D" unique_id=586864424 instance=ExtResource("2_mk8xa")]
 transform = Transform3D(-1, 0, 1.509958e-07, 0, 1, 0, -1.509958e-07, 0, -1, 0, -2.2888126, 0)
 
-[node name="SpotLight3D4" type="SpotLight3D" parent="Camera3D/ViewmodelDoodle" unique_id=100325224]
-transform = Transform3D(-1, 8.064567e-08, -1.2765582e-07, 0, 0.84542626, 0.5340921, 1.509958e-07, 0.5340921, -0.84542626, -7.3976835e-08, 2.6139688, -0.48992646)
-layers = 2
-light_energy = 1.4
-spot_range = 2.028
-spot_angle = 29.68
-
 [node name="Skeleton3D" parent="Camera3D/ViewmodelDoodle/RixinGameRig" parent_id_path=PackedInt32Array(586864424, 170382029) index="0" unique_id=2066586442]
 bones/0/position = Vector3(7.85804e-14, 1.0674006, -0.067994446)
 bones/0/rotation = Quaternion(0.09290869, -3.9364592e-14, 1.6989008e-13, 0.99567467)
@@ -115,8 +108,15 @@ remote_path = NodePath("../../../../../SpotLight3D2")
 transform = Transform3D(0.96814764, 0, 0.25038, 0.25038, -3.7252903e-08, -0.96814764, 0, 1, -4.371139e-08, -0.10170728, 0.33427078, -1.1641532e-10)
 remote_path = NodePath("../../../../../SpotLight3D3")
 
-[node name="AnimationPlayer" parent="Camera3D/ViewmodelDoodle" index="2" unique_id=34816507]
+[node name="AnimationPlayer" parent="Camera3D/ViewmodelDoodle" index="1" unique_id=34816507]
 autoplay = &"gn_gernidol"
+
+[node name="SpotLight3D4" type="SpotLight3D" parent="Camera3D/ViewmodelDoodle" unique_id=100325224]
+transform = Transform3D(-1, 8.064567e-08, -1.2765582e-07, 0, 0.84542626, 0.5340921, 1.509958e-07, 0.5340921, -0.84542626, -7.3976835e-08, 2.6139688, -0.48992646)
+layers = 2
+light_energy = 1.4
+spot_range = 2.028
+spot_angle = 29.68
 
 [node name="SpotLight3D" type="SpotLight3D" parent="Camera3D" unique_id=1432049311]
 transform = Transform3D(0.9999756, 6.0922215e-05, 0.0069809943, 0, 0.9999619, -0.008726535, -0.00698126, 0.008726323, 0.99993753, 0.111, -0.128, 0.052)

@@ -38,7 +38,6 @@ shape = SubResource("ConvexPolygonShape3D_32sqt")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=568343556]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 39.087547, 0)
-visible = false
 layers = 3
 light_energy = 15.879
 omni_range = 133.814
@@ -51,6 +50,10 @@ mesh = SubResource("BoxMesh_wbj16")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="StaticBody3D2" unique_id=1228996577]
 transform = Transform3D(2.580855, 0, 0, 0, 6.2698793, 0, 0, 0, 11.202797, -5.765211, 1.8307459, 2.6003952)
+mesh = SubResource("BoxMesh_wbj16")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="StaticBody3D2" unique_id=2026645006]
+transform = Transform3D(0.5732058, 0, 10.922997, 0, 6.2698793, 0, -2.5163956, 0, 2.488132, 0.9583845, 1.8307459, 12.631624)
 mesh = SubResource("BoxMesh_wbj16")
 
 [node name="SpawnPoint" parent="." unique_id=1429277790 instance=ExtResource("1_0uj6t")]
