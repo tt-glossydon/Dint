@@ -4,6 +4,18 @@
 [ext_resource type="Texture2D" uid="uid://dbuigg3mkp5rj" path="res://Textures/FlashlightProjector.png" id="2_84rtu"]
 [ext_resource type="PackedScene" uid="uid://b1gf0yydapa3d" path="res://CharacterController/ViewmodelDoodle.glb" id="2_mk8xa"]
 [ext_resource type="Texture2D" uid="uid://6tbk6i7i7752" path="res://Textures/MuzzleFlashProjector.png" id="4_piwso"]
+[ext_resource type="PackedScene" uid="uid://wbbchn2ekddl" path="res://CharacterController/Survivor/SurvivorTest.tscn" id="5_wnc1q"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6158t"]
+vertex_color_use_as_albedo = true
+metallic = 1.0
+metallic_specular = 1.0
+roughness = 0.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_4ekg4"]
+material = SubResource("StandardMaterial3D_6158t")
+radius = 0.2
+height = 0.4
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bc1g7"]
 
@@ -19,12 +31,15 @@ properties/1/replication_mode = 1
 script = ExtResource("1_y64o8")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1200371737]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.61072886, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6185876, 0)
 
 [node name="ViewmodelDoodle" parent="Camera3D" unique_id=586864424 instance=ExtResource("2_mk8xa")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, -2.2888126, 0)
 
-[node name="Skeleton3D" parent="Camera3D/ViewmodelDoodle/RixinGameRig" parent_id_path=PackedInt32Array(586864424, 1963631863) index="0" unique_id=1813190475]
+[node name="RixinGameRig" parent="Camera3D/ViewmodelDoodle" index="0" unique_id=1963631863]
+visible = false
+
+[node name="Skeleton3D" parent="Camera3D/ViewmodelDoodle/RixinGameRig" index="0" unique_id=1813190475]
 bones/0/position = Vector3(7.85804e-14, 1.0587417, -0.07851372)
 bones/0/rotation = Quaternion(0.09378668, -3.9514395e-14, 1.6985541e-13, 0.9955924)
 bones/9/position = Vector3(0.026697896, 0.06678154, 0.06388394)
@@ -120,7 +135,7 @@ spot_range = 16.0
 spot_attenuation = 0.2
 
 [node name="SpotLight3D2" type="SpotLight3D" parent="Camera3D" unique_id=2029152839]
-transform = Transform3D(0.9995306, 0.0087232515, 0.029360384, -0.008881714, 0.9999468, 0.0052725784, -0.029312968, -0.005530812, 0.99955493, 0.16466391, -0.34418362, -1.1969756)
+transform = Transform3D(0.9995306, 0.0087232515, 0.029360384, -0.008881714, 0.9999468, 0.0052725784, -0.029312968, -0.005530812, 0.99955493, 0.16466391, -0.34418368, -1.1969756)
 light_energy = 0.65
 light_volumetric_fog_energy = 0.5
 light_projector = ExtResource("2_84rtu")
@@ -135,7 +150,7 @@ spot_angle = 35.0
 spot_angle_attenuation = 0.7578593
 
 [node name="SpotLight3D3" type="SpotLight3D" parent="Camera3D" unique_id=384195360]
-transform = Transform3D(0.9995306, 0.0087232515, 0.029360384, -0.008881714, 0.9999468, 0.0052725784, -0.029312968, -0.005530812, 0.99955493, 0.16466391, -0.34418362, -1.1969756)
+transform = Transform3D(0.9995306, 0.0087232515, 0.029360384, -0.008881714, 0.9999468, 0.0052725784, -0.029312968, -0.005530812, 0.99955493, 0.16466391, -0.34418368, -1.1969756)
 visible = false
 light_color = Color(1, 0.72866666, 0.26, 1)
 light_energy = 4.0
@@ -151,16 +166,41 @@ spot_angle = 55.0
 spot_angle_attenuation = 3.4822025
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Camera3D" unique_id=353427473]
+visible = false
 light_energy = 0.05
 light_specular = 0.0
 omni_range = 1.146
 omni_attenuation = 0.185
 omni_shadow_mode = 0
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Camera3D" unique_id=138838357]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.0273597)
+layers = 4
+cast_shadow = 0
+mesh = SubResource("SphereMesh_4ekg4")
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="Camera3D" unique_id=1060263859]
+layers = 4
+update_mode = 1
+size = Vector3(50, 50, 50)
+interior = true
+cull_mask = 1
+reflection_mask = 4
+ambient_color = Color(0.12, 0.12, 0.12, 1)
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1280031334]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0078588, 0)
 shape = SubResource("CapsuleShape3D_bc1g7")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1108035483]
 replication_config = SubResource("SceneReplicationConfig_y64o8")
 
+[node name="Node3D" parent="." unique_id=1417040518 instance=ExtResource("5_wnc1q")]
+transform = Transform3D(-0.6, 0, 9.059749e-08, 0, 0.6, 0, -9.059749e-08, 0, -0.6, 0, 0, 0)
+
+[node name="Final_Lores" parent="Node3D/Glossy_SCP_001_LORES_001" parent_id_path=PackedInt32Array(1417040518, 1542992511) index="0" unique_id=2043260842]
+layers = 6
+
 [editable path="Camera3D/ViewmodelDoodle"]
+[editable path="Node3D"]
+[editable path="Node3D/Glossy_SCP_001_LORES_001"]

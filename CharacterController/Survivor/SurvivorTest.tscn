@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://wbbchn2ekddl"]
+
+[ext_resource type="PackedScene" uid="uid://dl4a2hmdfoucu" path="res://CharacterController/Survivor/Glossy_SCP_001_LORES_001.fbx" id="1_ngknq"]
+[ext_resource type="Material" uid="uid://c5rni0feqjphh" path="res://CharacterController/Survivor/SurvivorMaterial.tres" id="2_btygy"]
+
+[node name="Node3D" type="Node3D" unique_id=1417040518]
+
+[node name="Glossy_SCP_001_LORES_001" parent="." unique_id=1542992511 instance=ExtResource("1_ngknq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.529048, 0)
+
+[node name="Final_Lores" parent="Glossy_SCP_001_LORES_001" index="0" unique_id=2043260842]
+layers = 2
+surface_material_override/0 = ExtResource("2_btygy")
+
+[editable path="Glossy_SCP_001_LORES_001"]

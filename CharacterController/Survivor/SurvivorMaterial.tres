@@ -1,0 +1,15 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://c5rni0feqjphh"]
+
+[ext_resource type="Texture2D" uid="uid://cb6ul7jvjmx3b" path="res://CharacterController/Survivor/T_SCP_ALbedo.png" id="1_yxo7w"]
+[ext_resource type="Texture2D" uid="uid://cnqeuiywvcadp" path="res://CharacterController/Survivor/T_SCP_Metallic.png" id="2_e47qo"]
+[ext_resource type="Texture2D" uid="uid://c7pbi52vbo2qh" path="res://CharacterController/Survivor/T_SCP_Normal.png" id="3_y0vy1"]
+[ext_resource type="Texture2D" uid="uid://cbdkuwyk4rkqh" path="res://CharacterController/Survivor/T_SCP_Roughness.png" id="4_twt4s"]
+
+[resource]
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_yxo7w")
+metallic = 1.0
+metallic_texture = ExtResource("2_e47qo")
+roughness_texture = ExtResource("4_twt4s")
+normal_enabled = true
+normal_texture = ExtResource("3_y0vy1")
