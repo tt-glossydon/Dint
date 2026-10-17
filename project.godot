@@ -107,7 +107,6 @@ environment/volumetric_fog/volume_depth=96
 environment/volumetric_fog/use_filter=0
 anti_aliasing/quality/screen_space_aa=2
 occlusion_culling/use_occlusion_culling=true
-lights_and_shadows/positional_shadow/atlas_quadrant_0_subdiv=1
 
 [steam]
 

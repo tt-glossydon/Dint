@@ -23,6 +23,12 @@ extends CharacterBody3D
 # Is the player running/sprinting
 var running: bool = true
 
+# We can probably remove this later, since it's a bit screwy.
+@onready var animtree_vm : AnimationTree = $Camera3D/SurvivorRigVM_Test/AnimationTree as AnimationTree
+@onready var animtree_3p : AnimationTree
+
+var ammo : int = 8
+
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
@@ -46,6 +52,13 @@ func _unhandled_input(event: InputEvent) -> void:
 	
 	if event.is_action_pressed("move_sprint"):
 		running = false
+		if animtree_vm.get("parameters/Transition/current_state") == "Idle":
+			if ammo:
+				animtree_vm.set("parameters/OS_Shoot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+				ammo -= 1
+			else:
+				animtree_vm.set("parameters/Transition/transition_request", "Reload")
+				set_deferred("ammo", 8)
 	elif event.is_action_released("move_sprint"):
 		running = true
 
