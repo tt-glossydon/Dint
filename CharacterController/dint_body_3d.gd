@@ -1,6 +1,7 @@
 extends CharacterBody3D
 
 @onready var camera = $Camera3D
+@onready var ui = $DintHud
 
 ## The mouse sensitivity
 @export var sensitivity: float = 0.001
@@ -27,6 +28,7 @@ func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
 	camera.current = is_multiplayer_authority()
+	ui.ui_camera.current = is_multiplayer_authority()
 	set_physics_process(is_multiplayer_authority())
 	set_process_unhandled_input(is_multiplayer_authority())
 	if is_multiplayer_authority():
