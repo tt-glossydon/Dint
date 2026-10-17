@@ -38,7 +38,7 @@ shape = SubResource("ConvexPolygonShape3D_32sqt")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=568343556]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 39.087547, 0)
-layers = 3
+layers = 524289
 light_energy = 15.879
 omni_range = 133.814
 

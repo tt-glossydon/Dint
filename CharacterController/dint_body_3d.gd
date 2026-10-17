@@ -41,8 +41,8 @@ var bob_amount: float = 0.0
 # The starting position of the camera
 @onready var camera_start_pos = $Camera3D.position
 
-@onready var viewmodel_base = $Camera3D/ViewmodelDoodle
-@onready var viewmodel = $Camera3D/ViewmodelDoodle/RixinGameRig
+@onready var viewmodel_base = $Camera3D/SurvivorRigVM_Test
+@onready var viewmodel = $Camera3D/SurvivorRigVM_Test/rig
 
 # We can probably remove this later, since it's a bit screwy.
 @onready var animtree_vm : AnimationTree = $Camera3D/SurvivorRigVM_Test/AnimationTree as AnimationTree
@@ -51,6 +51,8 @@ var bob_amount: float = 0.0
 var ammo : int = 8
 
 func _ready() -> void:
+	ui.player_camera = camera
+	
 	# Setup for local client
 	camera.current = is_multiplayer_authority()
 	ui.ui_camera.current = is_multiplayer_authority()
