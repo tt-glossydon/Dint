@@ -82,6 +82,12 @@ move_jump={
 ]
 }
 
+[layer_names]
+
+3d_render/layer_1="Level"
+3d_render/layer_2="Object"
+3d_render/layer_3="ThisPlayer"
+
 [physics]
 
 3d/physics_engine="Jolt Physics"
@@ -89,6 +95,8 @@ move_jump={
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+lights_and_shadows/directional_shadow/16_bits=false
+lights_and_shadows/positional_shadow/atlas_16_bits=false
 environment/ssao/quality=1
 environment/ssao/adaptive_target=0.25
 environment/ssao/blur_passes=1

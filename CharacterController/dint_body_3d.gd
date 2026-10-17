@@ -44,6 +44,12 @@ var bob_amount: float = 0.0
 @onready var viewmodel_base = $Camera3D/ViewmodelDoodle
 @onready var viewmodel = $Camera3D/ViewmodelDoodle/RixinGameRig
 
+# We can probably remove this later, since it's a bit screwy.
+@onready var animtree_vm : AnimationTree = $Camera3D/SurvivorRigVM_Test/AnimationTree as AnimationTree
+@onready var animtree_3p : AnimationTree
+
+var ammo : int = 8
+
 func _ready() -> void:
 	# Setup for local client
 	camera.current = is_multiplayer_authority()
@@ -79,14 +85,20 @@ func _physics_process(delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		mouse_rotate(event.relative * sensitivity)
-	
-	if event.is_action_pressed("move_walk"):
-		walking = true
-	elif event.is_action_released("move_walk"):
-		walking = false
 		
 	if event.is_action_pressed("move_jump") && is_on_floor():
 		velocity.y = jump_strength
+	if event.is_action_pressed("move_walk"):
+		walking = true
+		if animtree_vm.get("parameters/Transition/current_state") == "Idle":
+			if ammo:
+				animtree_vm.set("parameters/OS_Shoot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+				ammo -= 1
+			else:
+				animtree_vm.set("parameters/Transition/transition_request", "Reload")
+				set_deferred("ammo", 8)
+	elif event.is_action_released("move_walk"):
+		walking = false
 
 ## Move the player in a 2d direction vector and a given delta time
 func move(in_dir: Vector2, delta: float) -> void:
