@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Dint"
-run/main_scene="uid://bdp7my57prhol"
+run/main_scene="uid://blv3vd48o6fna"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="uid://bei4yc1qe05va"
 
@@ -21,7 +21,7 @@ buses/default_bus_layout="uid://b8wr0hwoqop4v"
 
 [autoload]
 
-Gamemanager="*uid://by58xlf3u8puo"
+Gamemanager="*uid://c0wmmqoimugnv"
 
 [debug]
 
@@ -64,7 +64,7 @@ move_forward={
 , Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":1,"axis_value":-1.0,"script":null)
 ]
 }
-move_sprint={
+move_walk={
 "deadzone": 0.2,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194325,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
 , Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":9,"pressure":0.0,"pressed":true,"script":null)
@@ -73,6 +73,12 @@ move_sprint={
 toggle_fullscreen={
 "deadzone": 0.2,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194342,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+move_jump={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":32,"key_label":0,"unicode":32,"location":0,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":0,"pressure":0.0,"pressed":false,"script":null)
 ]
 }
 

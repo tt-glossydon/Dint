@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://ddo56j5jytdj2"]
+
+[ext_resource type="Script" uid="uid://cwbd668q4pyk3" path="res://PlayerSpawn/spawn_point.gd" id="1_qfb1j"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_wbj16"]
+
+[node name="SpawnPoint" type="Node3D" unique_id=1429277790 groups=["spawns"]]
+script = ExtResource("1_qfb1j")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1696276582]
+mesh = SubResource("BoxMesh_wbj16")
