@@ -1,0 +1,57 @@
+[gd_resource type="AnimationNodeBlendTree" format=3 uid="uid://b0r3fd7ulepkh"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4j1yh"]
+animation = &"VM-shoot-test"
+use_custom_timeline = true
+timeline_length = 0.4
+stretch_time_scale = false
+start_offset = 0.0
+loop_mode = 0
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_443v6"]
+animation = &"VM-reload-test"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kotd0"]
+animation = &"ShootTest/MuzzleFlash"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_i01jy"]
+animation = &"VM-test"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_kotd0"]
+sync = true
+fadein_time = 0.05
+fadeout_time = 0.2
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_f2057"]
+filter_enabled = true
+filters = ["../BoneAttachment3D/Node3D2/PistolTest/Plane_001", "../MuzzleFlash:visible"]
+mix_mode = 1
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_ptjcw"]
+input_0/name = "Reload"
+input_0/auto_advance = true
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "Idle"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+
+[resource]
+graph_offset = Vector2(-648.989, -45.224)
+nodes/output/position = Vector2(660, 80)
+nodes/Animation/node = SubResource("AnimationNodeAnimation_i01jy")
+nodes/Animation/position = Vector2(-840, 120)
+"nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_4j1yh")
+"nodes/Animation 2/position" = Vector2(-300, 280)
+"nodes/Animation 3/node" = SubResource("AnimationNodeAnimation_443v6")
+"nodes/Animation 3/position" = Vector2(-860, -100)
+nodes/Transition/node = SubResource("AnimationNodeTransition_ptjcw")
+nodes/Transition/position = Vector2(-573, 101)
+nodes/OS_Shoot/node = SubResource("AnimationNodeOneShot_kotd0")
+nodes/OS_Shoot/position = Vector2(-40, 120)
+nodes/OS_ShootAdd/node = SubResource("AnimationNodeOneShot_f2057")
+nodes/OS_ShootAdd/position = Vector2(380, 80)
+"nodes/Animation 4/node" = SubResource("AnimationNodeAnimation_kotd0")
+"nodes/Animation 4/position" = Vector2(120, 280)
+node_connections = [&"output", 0, &"OS_ShootAdd", &"Transition", 0, &"Animation 3", &"Transition", 1, &"Animation", &"OS_Shoot", 0, &"Transition", &"OS_Shoot", 1, &"Animation 2", &"OS_ShootAdd", 0, &"OS_Shoot", &"OS_ShootAdd", 1, &"Animation 4"]

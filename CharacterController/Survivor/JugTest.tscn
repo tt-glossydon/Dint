@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://bhfnqob65c6cq"]
+
+[ext_resource type="PackedScene" uid="uid://cu2kowymqcp5y" path="res://CharacterController/Juggernaut/Juggernaught_Glossy_LORES_002.fbx" id="1_8ft2q"]
+[ext_resource type="Texture2D" uid="uid://hqkrgm3uhenc" path="res://CharacterController/Juggernaut/T_JN_ALbedo.png" id="2_ymd4r"]
+[ext_resource type="Texture2D" uid="uid://u52cigf3o4pl" path="res://CharacterController/Juggernaut/T_JN_Metallic.png" id="3_1c7yq"]
+[ext_resource type="Texture2D" uid="uid://b3iqvgmbiqmx5" path="res://CharacterController/Juggernaut/T_JN_Normal.png" id="4_6546k"]
+[ext_resource type="Texture2D" uid="uid://c0uqej1fnvacc" path="res://CharacterController/Juggernaut/T_JN_Roughness.png" id="5_1k1ak"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3guwg"]
+albedo_texture = ExtResource("2_ymd4r")
+metallic = 1.0
+metallic_texture = ExtResource("3_1c7yq")
+roughness_texture = ExtResource("5_1k1ak")
+normal_enabled = true
+normal_texture = ExtResource("4_6546k")
+bent_normal_enabled = true
+texture_filter = 5
+
+[node name="Juggernaught_Glossy_LORES_002" unique_id=56288080 instance=ExtResource("1_8ft2q")]
+
+[node name="Zremeshing" parent="." index="0" unique_id=739179823]
+surface_material_override/0 = SubResource("StandardMaterial3D_3guwg")

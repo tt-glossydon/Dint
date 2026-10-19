@@ -13,3 +13,4 @@ metallic_texture = ExtResource("2_e47qo")
 roughness_texture = ExtResource("4_twt4s")
 normal_enabled = true
 normal_texture = ExtResource("3_y0vy1")
+bent_normal_enabled = true

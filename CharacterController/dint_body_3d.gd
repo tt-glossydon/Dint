@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-@onready var camera = $Camera3D
+@onready var camera := $Camera3D as Camera3D
 @onready var ui = $DintHud
 
 ## The mouse sensitivity
@@ -38,14 +38,18 @@ var walking: bool = false
 @export var bob_return_strength: float = 8.0
 # The current view bob amount/delta
 var bob_amount: float = 0.0
+var bob_offset: Vector3 = Vector3.ZERO
+var bob_interp_factor: float = 0.0:
+	set(to_what):
+		bob_interp_factor = clampf(to_what, 0.0, 1.0)
 # The starting position of the camera
-@onready var camera_start_pos = $Camera3D.position
+@onready var camera_start_pos := camera.position as Vector3
 
-@onready var viewmodel_base = $Camera3D/SurvivorRigVM_Test
-@onready var viewmodel = $Camera3D/SurvivorRigVM_Test/rig
+@onready var viewmodel_base := $Camera3D/SurvivorRigVM_Test as Node3D
+@onready var viewmodel := $Camera3D/SurvivorRigVM_Test/rig as Node3D
 
 # We can probably remove this later, since it's a bit screwy.
-@onready var animtree_vm : AnimationTree = $Camera3D/SurvivorRigVM_Test/AnimationTree as AnimationTree
+@onready var animtree_vm : AnimationTree = $AnimationTree as AnimationTree
 @onready var animtree_3p : AnimationTree
 
 var ammo : int = 8
@@ -67,7 +71,7 @@ func _physics_process(delta: float) -> void:
 	
 	# Fall
 	if not is_on_floor():
-		velocity += get_gravity() * delta
+		velocity += (get_gravity()*4.0) * delta
 	
 	mouse_rotate(
 		Vector2(Input.get_joy_axis(0, JOY_AXIS_RIGHT_X), 
@@ -76,11 +80,15 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	
 	# View bob
-	if is_on_floor() && velocity.length() > 0.1:
-		bob_amount += delta * velocity.length() * float(is_on_floor())
-		camera.position += view_bob(bob_amount)
-		viewmodel.global_position = viewmodel_base.global_position - view_bob(bob_amount)
+	bob_offset = view_bob(bob_amount)
+	if is_on_floor() && (velocity*Vector3(1, 0, 1)).length() > 0.1:
+		# Multiplying by a flat Vector3 ignores vertical speed
+		bob_interp_factor += (delta*0.75) * (velocity*Vector3(1, 0, 1)).length() * float(is_on_floor())
+		bob_amount += delta * (velocity*Vector3(1, 0, 1)).length() * float(is_on_floor())
+		camera.position += bob_offset*bob_interp_factor
+		viewmodel.global_position = viewmodel_base.global_position - (((camera.global_basis.x * bob_offset.x) + (camera.global_basis.y * bob_offset.y))*bob_interp_factor)
 	else:
+		bob_interp_factor -= delta
 		camera.position = camera.position.lerp(camera_start_pos, delta * bob_return_strength)
 		viewmodel.global_position = viewmodel.global_position.lerp(viewmodel_base.global_position, delta * bob_return_strength)
 
@@ -92,15 +100,22 @@ func _unhandled_input(event: InputEvent) -> void:
 		velocity.y = jump_strength
 	if event.is_action_pressed("move_walk"):
 		walking = true
+	elif event.is_action_released("move_walk"):
+		walking = false
+	elif event.is_action_pressed("Shoot"):
 		if animtree_vm.get("parameters/Transition/current_state") == "Idle":
 			if ammo:
 				animtree_vm.set("parameters/OS_Shoot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+				animtree_vm.set("parameters/OS_ShootAdd/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 				ammo -= 1
 			else:
 				animtree_vm.set("parameters/Transition/transition_request", "Reload")
 				set_deferred("ammo", 8)
-	elif event.is_action_released("move_walk"):
-		walking = false
+	elif event.is_action_pressed("Reload"):
+		if animtree_vm.get("parameters/Transition/current_state") == "Idle":
+			if ammo < 8:
+				animtree_vm.set("parameters/Transition/transition_request", "Reload")
+				set_deferred("ammo", 8)
 
 ## Move the player in a 2d direction vector and a given delta time
 func move(in_dir: Vector2, delta: float) -> void:
