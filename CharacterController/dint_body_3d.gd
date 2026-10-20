@@ -170,6 +170,8 @@ func move(in_dir: Vector2, delta: float) -> void:
 func mouse_rotate(rot: Vector2) -> void:
 	rotate_y(-rot.x)
 	camera.rotate_x(-rot.y)
+	if is_equal_approx(camera.rotation.x + rot.y, deg_to_rad(pitch_clamp_angle)) or is_equal_approx(camera.rotation.x + rot.y, deg_to_rad(-pitch_clamp_angle)):
+		rot *= Vector2(1, 0)
 	var dir_vec2 = viewmodel_spring.update(get_process_delta_time(), Vector2(viewmodel_sway_dir.x, viewmodel_sway_dir.y), rot)
 	if dir_vec2 == null:
 		viewmodel_spring._previousValue = Vector2.ZERO
