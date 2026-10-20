@@ -2,12 +2,27 @@
 
 [ext_resource type="Script" uid="uid://b8at2bnqvmkuq" path="res://CharacterController/dint_body_3d.gd" id="1_y64o8"]
 [ext_resource type="Texture2D" uid="uid://dbuigg3mkp5rj" path="res://Textures/FlashlightProjector.png" id="2_84rtu"]
-[ext_resource type="PackedScene" uid="uid://cidqc14h1uhe5" path="res://CharacterController/Survivor/SurvivorRigVM_Test.glb" id="4_jiavk"]
+[ext_resource type="Script" uid="uid://rxq00uggx7vk" path="res://addons/value_spring/valuespring.gd" id="2_kotd0"]
+[ext_resource type="PackedScene" uid="uid://3v1ns7f1rv2m" path="res://CharacterController/Survivor/survivor_vm.tscn" id="4_i01jy"]
 [ext_resource type="Texture2D" uid="uid://6tbk6i7i7752" path="res://Textures/MuzzleFlashProjector.png" id="4_piwso"]
-[ext_resource type="Material" uid="uid://c5rni0feqjphh" path="res://CharacterController/Survivor/SurvivorMaterial.tres" id="5_57jrc"]
+[ext_resource type="AnimationLibrary" uid="uid://hfd3eop2234s" path="res://CharacterController/Survivor/ShootTest.res" id="5_kotd0"]
 [ext_resource type="PackedScene" uid="uid://wbbchn2ekddl" path="res://CharacterController/Survivor/SurvivorTest.tscn" id="5_wnc1q"]
-[ext_resource type="AnimationLibrary" uid="uid://hfd3eop2234s" path="res://CharacterController/Survivor/ShootTest.res" id="6_57jrc"]
+[ext_resource type="PackedScene" uid="uid://wtwr2spuhds8" path="res://CharacterController/PistolTest.glb" id="6_ptjcw"]
+[ext_resource type="Texture2D" uid="uid://7mhyf2oiovfl" path="res://CharacterController/Bow_Crosshair.png" id="7_i01jy"]
 [ext_resource type="PackedScene" uid="uid://ekfa6pw3ripg" path="res://CharacterController/dint_hud.tscn" id="9_443v6"]
+[ext_resource type="AnimationNodeBlendTree" uid="uid://b0r3fd7ulepkh" path="res://CharacterController/Survivor/SurvivorVM_Tree.tres" id="9_i01jy"]
+[ext_resource type="Texture2D" uid="uid://dfl1dmldsbauk" path="res://Textures/MuzzleFlashAny.png" id="9_ptjcw"]
+
+[sub_resource type="Resource" id="Resource_4ekg4"]
+script = ExtResource("2_kotd0")
+damping = 0.3
+response = 5.0
+metadata/_custom_type_script = "uid://rxq00uggx7vk"
+
+[sub_resource type="Resource" id="Resource_ptjcw"]
+script = ExtResource("2_kotd0")
+response = 1.25
+metadata/_custom_type_script = "uid://rxq00uggx7vk"
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6158t"]
 vertex_color_use_as_albedo = true
@@ -20,57 +35,115 @@ material = SubResource("StandardMaterial3D_6158t")
 radius = 0.2
 height = 0.4
 
-[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_4j1yh"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i01jy"]
+transparency = 2
+alpha_scissor_threshold = 0.202
+alpha_antialiasing_mode = 2
+alpha_antialiasing_edge = 0.18
+depth_draw_mode = 2
+no_depth_test = true
+diffuse_mode = 2
+specular_mode = 2
+disable_fog = true
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("7_i01jy")
+texture_filter = 1
+disable_receive_shadows = true
+billboard_mode = 1
+billboard_keep_scale = true
+fixed_size = true
+proximity_fade_distance = 0.01
+distance_fade_mode = 2
+distance_fade_min_distance = 7.0
+distance_fade_max_distance = 3.0
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4j1yh"]
-animation = &"VM-shoot-test"
-use_custom_timeline = true
-timeline_length = 0.4
-stretch_time_scale = false
-start_offset = 0.0
-loop_mode = 0
+[sub_resource type="QuadMesh" id="QuadMesh_4ekg4"]
+material = SubResource("StandardMaterial3D_i01jy")
+size = Vector2(0.05, 0.05)
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_443v6"]
-animation = &"VM-reload-test"
+[sub_resource type="Curve" id="Curve_5a7ph"]
+_data = [Vector2(0, 0.84931517), 0.0, 0.0, 0, 0, Vector2(0.15447155, 1), 0.0, 0.0, 0, 0, Vector2(0.49593493, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kotd0"]
-animation = &"ShootTest/MuzzleFlash"
+[sub_resource type="CurveTexture" id="CurveTexture_ab51e"]
+curve = SubResource("Curve_5a7ph")
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_i01jy"]
-animation = &"VM-test"
+[sub_resource type="Curve" id="Curve_ptjcw"]
+_limits = [-360.0, 360.0, 0.0, 1.0]
+bake_resolution = 50
+_data = [Vector2(0, -1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
 
-[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_kotd0"]
-sync = true
-fadein_time = 0.05
-fadeout_time = 0.2
+[sub_resource type="CurveTexture" id="CurveTexture_80fuu"]
+curve = SubResource("Curve_ptjcw")
 
-[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_ptjcw"]
-input_0/name = "Reload"
-input_0/auto_advance = true
-input_0/break_loop_at_end = false
-input_0/reset = true
-input_1/name = "Idle"
-input_1/auto_advance = false
-input_1/break_loop_at_end = false
-input_1/reset = true
+[sub_resource type="Gradient" id="Gradient_ptjcw"]
+offsets = PackedFloat32Array(0.09037901, 0.19825073, 0.48979592)
+colors = PackedColorArray(1, 0.9381667, 0.47000003, 1, 1, 0.75, 0, 1, 1, 0, 0, 1)
 
-[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_4ekg4"]
-graph_offset = Vector2(-1000, 334)
-nodes/Animation/node = SubResource("AnimationNodeAnimation_i01jy")
-nodes/Animation/position = Vector2(-840, 120)
-"nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_4j1yh")
-"nodes/Animation 2/position" = Vector2(-500, 460)
-"nodes/Animation 3/node" = SubResource("AnimationNodeAnimation_443v6")
-"nodes/Animation 3/position" = Vector2(-860, -100)
-nodes/Transition/node = SubResource("AnimationNodeTransition_ptjcw")
-nodes/Transition/position = Vector2(-573, 101)
-nodes/OS_Shoot/node = SubResource("AnimationNodeOneShot_kotd0")
-nodes/OS_Shoot/position = Vector2(-40, 120)
-nodes/Add2/node = SubResource("AnimationNodeAdd2_4j1yh")
-nodes/Add2/position = Vector2(-220, 380)
-"nodes/Animation 4/node" = SubResource("AnimationNodeAnimation_kotd0")
-"nodes/Animation 4/position" = Vector2(-560, 660)
-node_connections = [&"output", 0, &"OS_Shoot", &"Transition", 0, &"Animation 3", &"Transition", 1, &"Animation", &"OS_Shoot", 0, &"Transition", &"OS_Shoot", 1, &"Add2", &"Add2", 0, &"Animation 2", &"Add2", 1, &"Animation 4"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1ood1"]
+gradient = SubResource("Gradient_ptjcw")
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_f2057"]
+gradient = SubResource("Gradient_ptjcw")
+
+[sub_resource type="Curve" id="Curve_rssu0"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.26287264, 1), 0.0, 0.0, 0, 0, Vector2(0.64227647, 0.48630142), -2.8082201, -2.8082201, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_7ghvg"]
+curve = SubResource("Curve_rssu0")
+
+[sub_resource type="Curve" id="Curve_1ood1"]
+_data = [Vector2(0, 0.22602743), 0.0, 0.0, 0, 0, Vector2(0.26558265, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_ed22f"]
+curve = SubResource("Curve_1ood1")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_g8fh5"]
+angle_min = -29.99999
+angle_max = 30.000011
+angle_curve = SubResource("CurveTexture_80fuu")
+use_rotation_3d = true
+rotation_3d_min = Vector3(-0.865, -1.225, -0.15)
+rotation_3d_max = Vector3(1.15, 1.325, 1.74)
+direction = Vector3(0, 0, -1)
+spread = 10.0
+initial_velocity_min = 0.5
+initial_velocity_max = 0.7
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_ed22f")
+color = Color(1, 0.75, 0, 1)
+color_ramp = SubResource("GradientTexture1D_f2057")
+color_initial_ramp = SubResource("GradientTexture1D_1ood1")
+alpha_curve = SubResource("CurveTexture_ab51e")
+emission_curve = SubResource("CurveTexture_7ghvg")
+hue_variation_min = -0.050000023
+hue_variation_max = 0.049999975
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yyxh5"]
+transparency = 1
+cull_mode = 2
+diffuse_mode = 2
+specular_mode = 2
+disable_ambient_light = true
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 0.7403333, 0.59000003, 1)
+albedo_texture = ExtResource("9_ptjcw")
+metallic_specular = 0.0
+emission_enabled = true
+emission = Color(1, 0.6666667, 0, 1)
+emission_energy_multiplier = 2.0
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_6158t"]
+material = SubResource("StandardMaterial3D_yyxh5")
+size = Vector2(0.2, 0.2)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bc1g7"]
 
@@ -83,7 +156,13 @@ properties/1/spawn = true
 properties/1/replication_mode = 1
 
 [node name="DintBody3D" type="CharacterBody3D" unique_id=1326745764]
+collision_layer = 2
 script = ExtResource("1_y64o8")
+jump_strength = 15.0
+bob_side_amplitude = 0.02
+bob_return_strength = 15.0
+viewmodel_spring = SubResource("Resource_4ekg4")
+viewmodel_recoil_spring = SubResource("Resource_ptjcw")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1200371737]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6107289, 0)
@@ -100,8 +179,8 @@ shadow_blur = 0.2
 spot_range = 16.0
 spot_attenuation = 0.2
 
-[node name="SpotLight3D2" type="SpotLight3D" parent="Camera3D" unique_id=2029152839]
-transform = Transform3D(0.99350107, -0.10231571, 0.060404792, 0.09812857, 0.99376893, 0.061534256, -0.06626205, -0.055424206, 0.9951903, 0.20262188, -0.2889223, -0.8718998)
+[node name="TacLight" type="SpotLight3D" parent="Camera3D" unique_id=2029152839]
+transform = Transform3D(0.99334115, -0.1040738, 0.060404975, 0.099682055, 0.9934884, 0.06387156, -0.06659804, -0.057528682, 0.99500465, 0.187397, -0.25010216, -0.791601)
 light_energy = 0.65
 light_volumetric_fog_energy = 0.5
 light_projector = ExtResource("2_84rtu")
@@ -115,11 +194,11 @@ spot_attenuation = 0.2
 spot_angle = 30.0
 spot_angle_attenuation = 0.7578593
 
-[node name="SpotLight3D3" type="SpotLight3D" parent="Camera3D" unique_id=384195360]
-transform = Transform3D(0.99350107, -0.10231571, 0.060404792, 0.09812857, 0.99376893, 0.061534256, -0.06626205, -0.055424206, 0.9951903, 0.20622109, -0.17412162, -0.7958871)
+[node name="MuzzleFlash" type="SpotLight3D" parent="Camera3D" unique_id=384195360]
+transform = Transform3D(0.99334115, -0.1040738, 0.060404975, 0.099682055, 0.9934884, 0.06387156, -0.06659804, -0.057528682, 0.99500465, 0.17850146, -0.18175471, -0.8826802)
 visible = false
 light_color = Color(1, 0.72866666, 0.26, 1)
-light_energy = 4.0
+light_energy = 0.0
 light_volumetric_fog_energy = 0.1
 light_projector = ExtResource("4_piwso")
 light_bake_mode = 0
@@ -128,13 +207,24 @@ shadow_bias = 0.11
 shadow_blur = 0.2
 spot_range = 15.0
 spot_attenuation = 0.2
-spot_angle = 55.0
+spot_angle = 0.0
 spot_angle_attenuation = 3.4822025
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Camera3D/MuzzleFlash" unique_id=1301081947]
+transform = Transform3D(1, -9.546056e-09, -7.450581e-09, -9.546056e-09, 1.0000001, 3.7252903e-09, -7.450581e-09, 3.7252903e-09, 1, 0.006005734, 0.013779219, -0.089974105)
+layers = 524289
+light_color = Color(1, 0.72866666, 0.26, 1)
+light_energy = 0.0
+light_volumetric_fog_energy = 0.0
+shadow_caster_mask = 4294443008
+omni_range = 2.0
+omni_shadow_mode = 0
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Camera3D" unique_id=353427473]
 visible = false
 light_energy = 0.05
 light_specular = 0.0
+light_bake_mode = 0
 omni_range = 1.146
 omni_attenuation = 0.185
 omni_shadow_mode = 0
@@ -155,117 +245,137 @@ cull_mask = 1
 reflection_mask = 4
 ambient_color = Color(0.12, 0.12, 0.12, 1)
 
-[node name="SurvivorRigVM_Test" parent="Camera3D" unique_id=414472550 instance=ExtResource("4_jiavk")]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, -1.8, 0)
-
-[node name="Survivor_005" parent="Camera3D/SurvivorRigVM_Test/rig" parent_id_path=PackedInt32Array(414472550, 1735111978) index="0" unique_id=1961424825]
-visible = false
-layers = 524288
-
-[node name="Skeleton3D" parent="Camera3D/SurvivorRigVM_Test/rig" parent_id_path=PackedInt32Array(414472550, 1735111978) index="1" unique_id=2141756554]
-bones/0/rotation = Quaternion(0.9806632, 0.052514568, -0.18812226, -0.012327116)
-bones/5/rotation = Quaternion(-6.929526e-07, 0.9612492, -0.27568108, -2.3779562e-06)
-bones/6/rotation = Quaternion(0.9806632, -0.052514568, 0.18812226, -0.012327116)
-bones/15/rotation = Quaternion(0.012796921, -0.03983172, 0.8701975, -0.49092382)
-bones/15/scale = Vector3(1.0000001, 1.0000001, 1)
-bones/16/rotation = Quaternion(-3.026806e-08, -1.8440184e-07, 4.0396122e-07, 1)
-bones/17/rotation = Quaternion(0.20298105, -4.057606e-07, 6.171275e-08, 0.9791827)
-bones/17/scale = Vector3(1, 0.99999994, 1.0000001)
-bones/18/rotation = Quaternion(-6.891779e-08, 4.7497416e-08, 1.3364485e-07, 1)
-bones/19/rotation = Quaternion(-0.010546887, -0.0003716406, -0.035128158, 0.9993271)
-bones/19/scale = Vector3(0.9999997, 0.99999946, 0.99999964)
-bones/39/rotation = Quaternion(-0.6429488, 0.3519087, 0.39926714, 0.55078393)
-bones/40/position = Vector3(-0.20359887, 1.584749, -0.010700954)
-bones/40/rotation = Quaternion(0.31146932, 0.50310284, 0.70413965, 0.39250705)
-bones/40/scale = Vector3(1.0011628, 0.9976785, 1.0011628)
-bones/41/rotation = Quaternion(-1.572699e-07, 0.07115419, 3.143736e-07, 0.9974654)
-bones/42/rotation = Quaternion(0.2625214, 0.071188055, -0.019388266, 0.9621013)
-bones/42/scale = Vector3(1.0000936, 0.9989708, 1.0009415)
-bones/43/rotation = Quaternion(3.6971155e-08, 0.16087747, 4.0597218e-08, 0.9869745)
-bones/44/rotation = Quaternion(-0.15308508, 0.1612248, -0.1209027, 0.9674473)
-bones/44/scale = Vector3(0.9990375, 1.0019752, 0.9989933)
-bones/49/rotation = Quaternion(0.21509458, -0.7239565, -0.33363876, 0.5641865)
-bones/50/rotation = Quaternion(0.077015154, -0.0032977755, -0.1792891, 0.9807718)
-bones/52/position = Vector3(-0.026724564, 0.15822636, 0.0165315)
-bones/52/rotation = Quaternion(0.5498953, -0.3436764, 0.55263793, 0.52353907)
-bones/53/rotation = Quaternion(0.41870832, -0.057359677, -0.007480102, 0.9062766)
-bones/54/rotation = Quaternion(0.38266402, 0.016988935, 0.04712144, 0.9225288)
-bones/55/rotation = Quaternion(0.08763286, -0.6945931, 0.036006145, 0.7131372)
-bones/56/position = Vector3(-0.033102456, 0.15305814, -0.014469844)
-bones/56/rotation = Quaternion(0.72882867, -0.44663432, 0.3082824, 0.41747883)
-bones/57/rotation = Quaternion(0.38201767, 0.13697502, -0.054474063, 0.91232294)
-bones/58/rotation = Quaternion(0.28928334, -0.0015334078, -0.0045353905, 0.95723164)
-bones/59/rotation = Quaternion(0.07366124, -0.6751321, 0.054894622, 0.7319544)
-bones/60/position = Vector3(-0.039828308, 0.13884607, -0.038381543)
-bones/60/rotation = Quaternion(0.2631439, -0.27670613, 0.59989864, 0.70307225)
-bones/61/rotation = Quaternion(0.4607277, -0.23549148, 0.17013898, 0.83864564)
-bones/62/rotation = Quaternion(0.37192154, -0.0007898273, -0.0022485356, 0.9282611)
-bones/63/rotation = Quaternion(0.10473014, -0.65924424, 0.11555594, 0.73557836)
-
-[node name="Survivor" parent="Camera3D/SurvivorRigVM_Test/rig/Skeleton3D" index="0" unique_id=112301507]
-visible = false
-layers = 524288
-surface_material_override/0 = ExtResource("5_57jrc")
-
-[node name="Survivor_001" parent="Camera3D/SurvivorRigVM_Test/rig/Skeleton3D" index="1" unique_id=1848924816]
-layers = 524288
-surface_material_override/0 = ExtResource("5_57jrc")
-
-[node name="Survivor_002" parent="Camera3D/SurvivorRigVM_Test/rig/Skeleton3D" index="2" unique_id=1246176038]
-visible = false
-layers = 524288
-surface_material_override/0 = ExtResource("5_57jrc")
-
-[node name="Survivor_003" parent="Camera3D/SurvivorRigVM_Test/rig/Skeleton3D" index="3" unique_id=835205942]
-visible = false
-layers = 524288
-surface_material_override/0 = ExtResource("5_57jrc")
-
-[node name="Survivor_004" parent="Camera3D/SurvivorRigVM_Test/rig/Skeleton3D" index="4" unique_id=1812541796]
-visible = false
-layers = 524288
-surface_material_override/0 = ExtResource("5_57jrc")
-
-[node name="Survivor_006" parent="Camera3D/SurvivorRigVM_Test/rig/Skeleton3D" index="5" unique_id=86100887]
-layers = 524288
-surface_material_override/0 = ExtResource("5_57jrc")
-
-[node name="BoneAttachment3D" type="BoneAttachment3D" parent="Camera3D/SurvivorRigVM_Test/rig/Skeleton3D" index="6" unique_id=1079912670]
-transform = Transform3D(-0.9769799, -0.19027196, 0.102315724, 0.1104099, -0.035004854, 0.9937689, -0.18502426, 0.980082, 0.055424243, -0.23755056, 1.5837519, 0.52741385)
-bone_name = "DEF-hand.R"
-bone_idx = 44
-
-[node name="Node3D" type="Node3D" parent="Camera3D/SurvivorRigVM_Test/rig/Skeleton3D/BoneAttachment3D" unique_id=1272555766]
-transform = Transform3D(0.9761958, -0.19860928, 0.08715574, 0.19936793, 0.9799247, 0, -0.08540606, 0.017376058, 0.9961947, -0.062960684, 0.24532901, -0.044444848)
-
-[node name="RemoteTransform3D" type="RemoteTransform3D" parent="Camera3D/SurvivorRigVM_Test/rig/Skeleton3D/BoneAttachment3D/Node3D" unique_id=224246757]
-transform = Transform3D(0.9950194, -0.08540606, 0.0514023, 0.05307047, 0.017376013, -0.99843943, 0.08437962, 0.9961947, 0.021822013, -0.023888007, 0.09562391, -0.008864403)
-remote_path = NodePath("../../../../../../SpotLight3D2")
-
-[node name="RemoteTransform3D2" type="RemoteTransform3D" parent="Camera3D/SurvivorRigVM_Test/rig/Skeleton3D/BoneAttachment3D/Node3D" unique_id=1951437652]
-transform = Transform3D(0.9950194, -0.08540606, 0.0514023, 0.05307047, 0.017376013, -0.99843943, 0.08437962, 0.9961947, 0.021822013, -0.01917227, 0.0150488755, 0.10276522)
-remote_path = NodePath("../../../../../../SpotLight3D3")
-
-[node name="AnimationPlayer" parent="Camera3D/SurvivorRigVM_Test" index="1" unique_id=49581158]
-libraries/ShootTest = ExtResource("6_57jrc")
-
-[node name="AnimationTree" type="AnimationTree" parent="Camera3D/SurvivorRigVM_Test" unique_id=671909109]
-tree_root = SubResource("AnimationNodeBlendTree_4ekg4")
-anim_player = NodePath("../AnimationPlayer")
-parameters/Transition/current_state = "Idle"
-parameters/Transition/transition_request = ""
-parameters/Transition/current_index = 1
-parameters/OS_Shoot/active = false
-parameters/OS_Shoot/internal_active = false
-parameters/OS_Shoot/request = 0
-parameters/Add2/add_amount = 1.0
-
 [node name="SpotLight3D4" type="SpotLight3D" parent="Camera3D" unique_id=1347355416]
 transform = Transform3D(1, 0, 0, 0, 0.8868701, 0.46201885, 0, -0.46201885, 0.8868701, 0, 0.12998712, 0.18153343)
 layers = 524288
 light_energy = 0.1
+light_specular = 0.1
+light_bake_mode = 0
 spot_range = 1.117
 spot_angle = 90.0
+
+[node name="SurvivorRigVM_Test" parent="Camera3D" unique_id=221713123 instance=ExtResource("4_i01jy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.85, 0)
+
+[node name="Survivor_005" parent="Camera3D/SurvivorRigVM_Test/rig" parent_id_path=PackedInt32Array(221713123, 357180122) index="0" unique_id=231568537]
+visible = false
+
+[node name="Skeleton3D" parent="Camera3D/SurvivorRigVM_Test/rig" parent_id_path=PackedInt32Array(221713123, 357180122) index="1" unique_id=263994075]
+bones/39/rotation = Quaternion(-0.6429488, 0.3519087, 0.39926714, 0.55078393)
+bones/40/position = Vector3(-0.20359887, 1.584749, -0.010700954)
+bones/40/rotation = Quaternion(0.31126004, 0.50271857, 0.70463955, 0.39226833)
+bones/40/scale = Vector3(1.0011628, 0.9976785, 1.0011628)
+bones/41/rotation = Quaternion(-3.6583735e-08, 0.07147232, -2.6592962e-08, 0.9974426)
+bones/42/rotation = Quaternion(0.26335198, 0.07110601, -0.019431373, 0.9618795)
+bones/42/scale = Vector3(1.0000936, 0.9989708, 1.0009415)
+bones/43/rotation = Quaternion(2.5560084e-08, 0.16077268, 2.2670106e-08, 0.9869915)
+bones/44/rotation = Quaternion(-0.15317392, 0.16112833, -0.12115982, 0.967417)
+bones/44/scale = Vector3(0.9990375, 1.0019752, 0.9989933)
+bones/45/rotation = Quaternion(0.333913, -0.6824575, 0.13484554, 0.6360586)
+bones/46/rotation = Quaternion(0.43943945, 0.125572, -0.058184113, 0.8875468)
+bones/47/rotation = Quaternion(0.32388008, -0.002075635, -0.0070929783, 0.94606924)
+bones/49/rotation = Quaternion(0.48488158, -0.77136105, -0.07067773, 0.40607467)
+bones/50/rotation = Quaternion(0.24353772, -0.56190664, 0.18942073, 0.767509)
+bones/51/rotation = Quaternion(0.29855165, 0.022514831, 0.06517747, 0.9518991)
+bones/52/position = Vector3(-0.027446518, 0.1550961, 0.01849621)
+bones/52/rotation = Quaternion(0.28596544, -0.45446667, 0.45755228, 0.7087522)
+bones/53/rotation = Quaternion(0.41813394, -0.12349047, 0.023164408, 0.8996542)
+bones/54/rotation = Quaternion(0.38266408, 0.01698853, 0.047121834, 0.92252874)
+bones/55/rotation = Quaternion(0.09504559, -0.65830386, 0.045592308, 0.7453347)
+bones/56/position = Vector3(-0.03645412, 0.14901279, -0.011330783)
+bones/56/rotation = Quaternion(0.6566279, -0.4597599, 0.3227596, 0.5032761)
+bones/57/rotation = Quaternion(0.15639052, 0.070820145, -0.0085756015, 0.98511577)
+bones/58/rotation = Quaternion(0.28928354, -0.0015333073, -0.0045335465, 0.9572315)
+bones/59/rotation = Quaternion(0.10159054, -0.5954226, 0.08618489, 0.7922901)
+bones/60/position = Vector3(-0.050946042, 0.13305612, -0.033240277)
+bones/60/rotation = Quaternion(0.22382945, -0.19289288, 0.53074396, 0.7943575)
+bones/61/rotation = Quaternion(0.29456556, -0.26137725, 0.12203755, 0.9110544)
+bones/62/rotation = Quaternion(0.52754664, -0.0011686247, -0.002076476, 0.84952277)
+bones/63/rotation = Quaternion(0.15839778, -0.5251919, 0.19020005, 0.81419134)
+
+[node name="Survivor" parent="Camera3D/SurvivorRigVM_Test/rig/Skeleton3D" index="0" unique_id=856425938]
+visible = false
+layers = 524288
+
+[node name="Survivor_001" parent="Camera3D/SurvivorRigVM_Test/rig/Skeleton3D" index="1" unique_id=1053557312]
+layers = 524288
+
+[node name="Survivor_002" parent="Camera3D/SurvivorRigVM_Test/rig/Skeleton3D" index="2" unique_id=1299077531]
+visible = false
+layers = 524288
+
+[node name="Survivor_003" parent="Camera3D/SurvivorRigVM_Test/rig/Skeleton3D" index="3" unique_id=1636281595]
+visible = false
+layers = 524288
+
+[node name="Survivor_004" parent="Camera3D/SurvivorRigVM_Test/rig/Skeleton3D" index="4" unique_id=1466845173]
+visible = false
+layers = 524288
+
+[node name="Survivor_006" parent="Camera3D/SurvivorRigVM_Test/rig/Skeleton3D" index="5" unique_id=570155094]
+layers = 524288
+
+[node name="AnimationPlayer" parent="Camera3D/SurvivorRigVM_Test" index="1" unique_id=1499277797]
+libraries/ShootTest = ExtResource("5_kotd0")
+
+[node name="BoneAttachment3D" type="BoneAttachment3D" parent="Camera3D" unique_id=373789732]
+transform = Transform3D(0.9770324, 0.19040477, -0.101548456, 0.1096085, -0.034837663, 0.99386233, 0.18521936, -0.9800643, -0.055132203, 0.23763667, -0.2664523, -0.5272815)
+bone_name = "DEF-hand.R"
+bone_idx = 44
+use_external_skeleton = true
+external_skeleton = NodePath("../SurvivorRigVM_Test/rig/Skeleton3D")
+
+[node name="Node3D2" type="Node3D" parent="Camera3D/BoneAttachment3D" unique_id=1272555766]
+transform = Transform3D(0.97638243, -0.19903392, 0.08421706, 0.19960526, 0.9798378, 0.0019158125, -0.08295638, 0.014823183, 0.9964646, -0.066957235, 0.24833393, -0.07680178)
+
+[node name="PistolTest" parent="Camera3D/BoneAttachment3D/Node3D2" unique_id=1296883580 instance=ExtResource("6_ptjcw")]
+transform = Transform3D(-0.7986872, -2.220446e-16, -0.045603592, -0.045601264, 3.496836e-08, 0.798728, 1.9932977e-09, 0.7999828, -3.491351e-08, -0.031398144, -0.13256297, 0.11535459)
+
+[node name="Plane" parent="Camera3D/BoneAttachment3D/Node3D2/PistolTest" index="0" unique_id=868983776]
+layers = 524288
+
+[node name="Plane_001" parent="Camera3D/BoneAttachment3D/Node3D2/PistolTest" index="1" unique_id=1174116664]
+layers = 524288
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="Camera3D/BoneAttachment3D/Node3D2" unique_id=224246757]
+transform = Transform3D(0.9950194, -0.08540606, 0.0514023, 0.05307047, 0.017376013, -0.99843943, 0.08437962, 0.9961947, 0.021822013, -0.03777251, 0.008648362, 0.10974638)
+remote_path = NodePath("../../../TacLight")
+
+[node name="RemoteTransform3D2" type="RemoteTransform3D" parent="Camera3D/BoneAttachment3D/Node3D2" unique_id=1951437652]
+transform = Transform3D(0.9950194, -0.08540606, 0.0514023, 0.05307047, 0.017376013, -0.99843943, 0.08437962, 0.9961947, 0.021822013, -0.04449709, 0.09700067, 0.18188928)
+remote_path = NodePath("../../../MuzzleFlash")
+
+[node name="SpringArm3D" type="SpringArm3D" parent="Camera3D/BoneAttachment3D/Node3D2/RemoteTransform3D2" unique_id=1757834094]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+spring_length = 100.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Camera3D/BoneAttachment3D/Node3D2/RemoteTransform3D2/SpringArm3D" unique_id=1107388743]
+mesh = SubResource("QuadMesh_4ekg4")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="Camera3D/BoneAttachment3D/Node3D2/RemoteTransform3D2" unique_id=598468647]
+layers = 524294
+emitting = false
+lifetime = 0.18000000000000002
+fixed_fps = 60
+local_coords = true
+transform_align = 1
+transform_align_channel_filter = 1
+process_material = SubResource("ParticleProcessMaterial_g8fh5")
+draw_pass_1 = SubResource("QuadMesh_6158t")
+
+[node name="Gunshot" type="AudioStreamPlayer3D" parent="Camera3D/BoneAttachment3D" unique_id=681103306]
+transform = Transform3D(0.99954146, -0.0009085834, -0.0031130323, 0.00023062527, 1.0009989, 0.001224339, 0.0035986984, -0.0013175942, 0.99943966, -0.06624001, 0.10857147, 0.013245702)
+max_polyphony = 3
+panning_strength = 0.65
+
+[node name="Reload" type="AudioStreamPlayer3D" parent="Camera3D/BoneAttachment3D" unique_id=817352809]
+panning_strength = 0.65
+
+[node name="VM_Sway" type="Node3D" parent="Camera3D" unique_id=606854385]
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="Camera3D/VM_Sway" unique_id=1825134205]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.85, 0)
+remote_path = NodePath("../../SurvivorRigVM_Test")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1280031334]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0078588, 0)
@@ -280,12 +390,28 @@ replication_config = SubResource("SceneReplicationConfig_y64o8")
 transform = Transform3D(-0.6, 0, 9.059749e-08, 0, 0.6, 0, -9.059749e-08, 0, -0.6, 0, 0, 0)
 visible = false
 
-[node name="Final_Lores" parent="Node3D/Glossy_SCP_001_LORES_001" parent_id_path=PackedInt32Array(1417040518, 1542992511) index="0" unique_id=302920472]
+[node name="Final_Lores" parent="Node3D/Glossy_SCP_001_LORES_001" parent_id_path=PackedInt32Array(1417040518, 1542992511) index="0" unique_id=145800307]
 layers = 6
 cast_shadow = 3
 
 [node name="DintHud" parent="." unique_id=1774359308 instance=ExtResource("9_443v6")]
 
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=1495961731]
+root_node = NodePath("../Camera3D/SurvivorRigVM_Test")
+tree_root = ExtResource("9_i01jy")
+anim_player = NodePath("../Camera3D/SurvivorRigVM_Test/AnimationPlayer")
+parameters/Transition/current_state = "Idle"
+parameters/Transition/transition_request = ""
+parameters/Transition/current_index = 1
+parameters/OS_Shoot/active = false
+parameters/OS_Shoot/internal_active = false
+parameters/OS_Shoot/request = 0
+parameters/OS_ShootAdd/active = false
+parameters/OS_ShootAdd/internal_active = false
+parameters/OS_ShootAdd/request = 0
+parameters/Add2/add_amount = 1.0
+
 [editable path="Camera3D/SurvivorRigVM_Test"]
+[editable path="Camera3D/BoneAttachment3D/Node3D2/PistolTest"]
 [editable path="Node3D"]
 [editable path="Node3D/Glossy_SCP_001_LORES_001"]
