@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://ckac1r0ksmw1g"]
+
+[ext_resource type="Script" uid="uid://of4athl2qgkm" path="res://addons/value_spring/inspector/curve_preview.gd" id="1_c1oks"]
+[ext_resource type="Script" uid="uid://bhyqfyb86lmyp" path="res://addons/value_spring/inspector/preview_drawer.gd" id="2_0q3ih"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ol3iq"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 0.365, 0.365, 1)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_detail = 1
+
+[node name="CurvePreview" type="VBoxContainer" unique_id=579045993]
+offset_right = 1152.0
+offset_bottom = 648.0
+script = ExtResource("1_c1oks")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=974936002]
+layout_mode = 2
+
+[node name="CurvePreview" type="PanelContainer" parent="MarginContainer" unique_id=472064645]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+theme_type_variation = &"panel"
+theme_override_styles/panel = SubResource("StyleBoxFlat_ol3iq")
+script = ExtResource("2_0q3ih")
+
+[node name="Label" type="Label" parent="MarginContainer" unique_id=1475003436]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Spring Preview"
+horizontal_alignment = 1

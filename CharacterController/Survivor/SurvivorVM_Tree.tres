@@ -29,7 +29,7 @@ fadeout_time = 0.2
 
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_f2057"]
 filter_enabled = true
-filters = ["../BoneAttachment3D/Gunshot", "../BoneAttachment3D/Node3D2/PistolTest/Plane_001", "../MuzzleFlash/OmniLight3D:light_energy", "../MuzzleFlash:light_energy", "../MuzzleFlash:spot_angle", "../MuzzleFlash:visible"]
+filters = ["../..", "../BoneAttachment3D/Gunshot", "../BoneAttachment3D/Node3D2/PistolTest/Plane_001", "../BoneAttachment3D/Node3D2/RemoteTransform3D2/GPUParticles3D", "../MuzzleFlash/OmniLight3D:light_energy", "../MuzzleFlash:light_energy", "../MuzzleFlash:spot_angle", "../MuzzleFlash:visible"]
 mix_mode = 1
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_ptjcw"]
@@ -43,10 +43,10 @@ input_1/break_loop_at_end = false
 input_1/reset = true
 
 [resource]
-graph_offset = Vector2(-773.989, -54)
+graph_offset = Vector2(-869.989, 47)
 nodes/output/position = Vector2(660, 80)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_i01jy")
-nodes/Animation/position = Vector2(-920, 220)
+nodes/Animation/position = Vector2(-920, 200)
 "nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_4j1yh")
 "nodes/Animation 2/position" = Vector2(-300, 280)
 "nodes/Animation 3/node" = SubResource("AnimationNodeAnimation_443v6")

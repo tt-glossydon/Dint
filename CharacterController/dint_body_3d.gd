@@ -45,6 +45,7 @@ var bob_interp_factor: float = 0.0:
 # The starting position of the camera
 @onready var camera_start_pos := camera.position as Vector3
 
+@onready var vm_sway := $Camera3D/VM_Sway as Node3D
 @onready var viewmodel_base := $Camera3D/SurvivorRigVM_Test as Node3D
 @onready var viewmodel := $Camera3D/SurvivorRigVM_Test/rig as Node3D
 
@@ -52,9 +53,25 @@ var bob_interp_factor: float = 0.0:
 @onready var animtree_vm : AnimationTree = $AnimationTree as AnimationTree
 @onready var animtree_3p : AnimationTree
 
+@export var viewmodel_spring : ValueSpring
+@onready var viewmodel_sway_dir : Vector3 = Vector3.ZERO:
+	set(to_what):
+		viewmodel_sway_dir = Vector3(clampf(to_what.x, -2, 2), clampf(to_what.y, -2, 2), to_what.z)
+@onready var viewmodel_pull_interp_factor : float = 0.0:
+	set(to_what):
+		viewmodel_pull_interp_factor = clampf(to_what, 0.0, 1.0)
+
+@export var viewmodel_recoil_spring : ValueSpring
+@onready var viewmodel_recoil : Vector2 = Vector2.ZERO
+
 var ammo : int = 8
 
 func _ready() -> void:
+	viewmodel_spring._previousValue = Vector2.ZERO
+	viewmodel_spring._currentValue = Vector2.ZERO
+	viewmodel_spring.reset_spring(Vector2.ZERO)
+	viewmodel_recoil_spring.reset_spring(Vector2.ZERO)
+	
 	ui.player_camera = camera
 	
 	# Setup for local client
@@ -66,7 +83,7 @@ func _ready() -> void:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _physics_process(delta: float) -> void:
-	var input = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+	var input := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	move(input, delta)
 	
 	# Fall
@@ -117,6 +134,15 @@ func _unhandled_input(event: InputEvent) -> void:
 				animtree_vm.set("parameters/Transition/transition_request", "Reload")
 				set_deferred("ammo", 8)
 
+func _process(delta:float) -> void:
+	var dir_vec2 = viewmodel_spring.update(delta, Vector2(viewmodel_sway_dir.x, viewmodel_sway_dir.y), -Vector2(viewmodel_sway_dir.x, viewmodel_sway_dir.y)*8.0)
+	viewmodel_sway_dir = Vector3(dir_vec2.x, dir_vec2.y, 0)
+	viewmodel_recoil = viewmodel_recoil_spring.update(get_process_delta_time(), viewmodel_recoil*0.6, -viewmodel_recoil*5)
+	vm_sway.rotation.y = (-viewmodel_sway_dir.x*14) + viewmodel_recoil.x
+	vm_sway.rotation.x = (-viewmodel_sway_dir.y*14) + viewmodel_recoil.y
+	vm_sway.rotation.z = (viewmodel_sway_dir.x*17) * camera.global_basis.z.y
+	vm_sway.position = vm_sway.position.lerp(Vector3.ZERO.lerp(Vector3(0, -0.085, 0.05), viewmodel_pull_interp_factor), delta*3)
+
 ## Move the player in a 2d direction vector and a given delta time
 func move(in_dir: Vector2, delta: float) -> void:
 	# Running or walking
@@ -136,19 +162,35 @@ func move(in_dir: Vector2, delta: float) -> void:
 	
 	velocity.x = tmp_velocity.x
 	velocity.z = tmp_velocity.z
+	
+	viewmodel_pull_interp_factor = move_toward(viewmodel_pull_interp_factor, in_dir.length(), delta*3)
+	
 
 ## Rotate the player and camera
 func mouse_rotate(rot: Vector2) -> void:
 	rotate_y(-rot.x)
 	camera.rotate_x(-rot.y)
-	camera.rotation.x = clamp(
-		camera.rotation.x, 
-		deg_to_rad(-pitch_clamp_angle), 
+	var dir_vec2 = viewmodel_spring.update(get_process_delta_time(), Vector2(viewmodel_sway_dir.x, viewmodel_sway_dir.y), rot)
+	if dir_vec2 == null:
+		viewmodel_spring._previousValue = Vector2.ZERO
+		viewmodel_spring._currentValue = Vector2.ZERO
+		viewmodel_spring.reset_spring(Vector2.ZERO)
+		dir_vec2 = Vector2.ZERO
+	viewmodel_sway_dir = Vector3(dir_vec2.x, dir_vec2.y, 0)
+	#print(viewmodel_sway_dir)
+	camera.rotation.x = clampf(
+		camera.rotation.x,
+		deg_to_rad(-pitch_clamp_angle),
 		deg_to_rad(pitch_clamp_angle))
+
+func recoil_viewmodel() -> void:
+	print("Joe")
+	var vec := Vector2(randf_range(-1.0, 0.5), randf_range(0.86, 1.75))
+	viewmodel_recoil = viewmodel_recoil_spring.update(get_process_delta_time()*6, vec*0.2, vec)
 
 ## Returns a bob position based on the bob time
 func view_bob(time: float) -> Vector3:
-	var pos = Vector3.ZERO
+	var pos := Vector3.ZERO
 	pos.y = sin(time * bob_frequency) * bob_up_amplitude
 	pos.x = cos(time * (bob_frequency / 2.0)) * (bob_side_amplitude / 2.0)
 	return pos
