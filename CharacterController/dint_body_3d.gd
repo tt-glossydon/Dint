@@ -1,4 +1,7 @@
 extends CharacterBody3D
+class_name SurvivorBody3D
+
+signal toggle_light(to_what:bool)
 
 @onready var camera := $Camera3D as Camera3D
 @onready var ui = $DintHud
@@ -64,6 +67,18 @@ var bob_interp_factor: float = 0.0:
 @export var viewmodel_recoil_spring : ValueSpring
 @onready var viewmodel_recoil : Vector2 = Vector2.ZERO
 
+@onready var light_on : bool = true:
+	set(to_what):
+		if to_what != light_on:
+			for light in lights_to_toggle:
+				light.visible = to_what
+
+@export var lights_to_toggle : Array[Light3D]
+
+@onready var current_speed_anim_factor : float = 0.0:
+	set(to_what):
+		current_speed_anim_factor = clampf(to_what, 0.0, 1.0)
+
 var ammo : int = 8
 
 func _ready() -> void:
@@ -125,14 +140,21 @@ func _unhandled_input(event: InputEvent) -> void:
 				animtree_vm.set("parameters/OS_Shoot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 				animtree_vm.set("parameters/OS_ShootAdd/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 				ammo -= 1
+				get_window().set_input_as_handled()
 			else:
 				animtree_vm.set("parameters/Transition/transition_request", "Reload")
 				set_deferred("ammo", 8)
+				get_window().set_input_as_handled()
 	elif event.is_action_pressed("Reload"):
 		if animtree_vm.get("parameters/Transition/current_state") == "Idle":
 			if ammo < 8:
 				animtree_vm.set("parameters/Transition/transition_request", "Reload")
 				set_deferred("ammo", 8)
+				get_window().set_input_as_handled()
+	elif event.is_action_pressed("toggle_light"):
+		toggle_light.emit(!light_on)
+		get_window().set_input_as_handled()
+		pass
 
 func _process(delta:float) -> void:
 	var dir_vec2 = viewmodel_spring.update(delta, Vector2(viewmodel_sway_dir.x, viewmodel_sway_dir.y), -Vector2(viewmodel_sway_dir.x, viewmodel_sway_dir.y)*8.0)
@@ -141,7 +163,7 @@ func _process(delta:float) -> void:
 	vm_sway.rotation.y = (-viewmodel_sway_dir.x*14) + viewmodel_recoil.x
 	vm_sway.rotation.x = (-viewmodel_sway_dir.y*14) + viewmodel_recoil.y
 	vm_sway.rotation.z = (viewmodel_sway_dir.x*17) * camera.global_basis.z.y
-	vm_sway.position = vm_sway.position.lerp(Vector3.ZERO.lerp(Vector3(0, -0.085, 0.05), viewmodel_pull_interp_factor), delta*3)
+	vm_sway.position = vm_sway.position.lerp(Vector3.ZERO.lerp(Vector3(0, -0.085, 0.05), viewmodel_pull_interp_factor), delta*3) + Vector3(0, -camera.rotation.x*0.001, 0)
 
 ## Move the player in a 2d direction vector and a given delta time
 func move(in_dir: Vector2, delta: float) -> void:
@@ -155,6 +177,11 @@ func move(in_dir: Vector2, delta: float) -> void:
 	var target := direction * max_speed
 	var rate := acceleration if direction != Vector3.ZERO else deceleration
 	
+	var vec_movement_speed_factor := (get_position_delta() - get_platform_velocity()) / delta
+	var len_movement_speed_factor := vec_movement_speed_factor.length()
+	var len_movement_speed_factor_clamped := clampf(inverse_lerp(0.0, max_input_speed, len_movement_speed_factor), 0.0, 1.0)
+	current_speed_anim_factor = len_movement_speed_factor_clamped
+	
 	# The new velocity
 	var tmp_velocity := Vector3(velocity.x, 0, velocity.z)
 	tmp_velocity = tmp_velocity.move_toward(target, rate * delta)
@@ -163,7 +190,7 @@ func move(in_dir: Vector2, delta: float) -> void:
 	velocity.x = tmp_velocity.x
 	velocity.z = tmp_velocity.z
 	
-	viewmodel_pull_interp_factor = move_toward(viewmodel_pull_interp_factor, in_dir.length(), delta*3)
+	viewmodel_pull_interp_factor = move_toward(viewmodel_pull_interp_factor, in_dir.length()*len_movement_speed_factor_clamped, delta*3)
 	
 
 ## Rotate the player and camera
@@ -186,7 +213,7 @@ func mouse_rotate(rot: Vector2) -> void:
 		deg_to_rad(pitch_clamp_angle))
 
 func recoil_viewmodel() -> void:
-	var vec := Vector2(randf_range(-1.0, 0.5), randf_range(0.86, 1.75))
+	var vec := Vector2(randf_range(-0.5, 0.3), randf_range(0.86, 1.75))
 	viewmodel_recoil = viewmodel_recoil_spring.update(get_process_delta_time()*6, vec*0.2, vec)
 
 ## Returns a bob position based on the bob time
@@ -195,3 +222,6 @@ func view_bob(time: float) -> Vector3:
 	pos.y = sin(time * bob_frequency) * bob_up_amplitude
 	pos.x = cos(time * (bob_frequency / 2.0)) * (bob_side_amplitude / 2.0)
 	return pos
+
+func _on_toggle_light(to_what:bool) -> void:
+	light_on = to_what
