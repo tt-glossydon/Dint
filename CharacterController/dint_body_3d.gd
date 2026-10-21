@@ -203,6 +203,8 @@ func move(in_dir: Vector2, delta: float) -> void:
 	var target := direction * max_speed
 	var rate := acceleration if !direction.is_zero_approx() else deceleration
 	rate = rate if is_on_floor() or !direction.is_zero_approx() else rate / air_acceleration_div
+	if walking and !is_on_floor() and !direction.is_zero_approx():
+		rate /= 2.0
 	
 	var vec_movement_speed_factor := (get_position_delta() - get_platform_velocity()) / delta
 	var len_movement_speed_factor := vec_movement_speed_factor.length()
@@ -212,7 +214,7 @@ func move(in_dir: Vector2, delta: float) -> void:
 	# The new velocity
 	var tmp_velocity := Vector3(velocity.x, 0, velocity.z)
 	tmp_velocity = tmp_velocity.move_toward(target, rate * delta)
-	tmp_velocity = tmp_velocity.limit_length(max_speed)
+	tmp_velocity = tmp_velocity.limit_length(max_input_speed)
 	
 	velocity.x = tmp_velocity.x
 	velocity.z = tmp_velocity.z
