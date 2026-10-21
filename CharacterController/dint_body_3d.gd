@@ -70,6 +70,7 @@ var bob_interp_factor: float = 0.0:
 @onready var light_on : bool = true:
 	set(to_what):
 		if to_what != light_on:
+			light_on = to_what
 			for light in lights_to_toggle:
 				light.visible = to_what
 
