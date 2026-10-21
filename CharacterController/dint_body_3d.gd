@@ -76,6 +76,9 @@ var bob_interp_factor: float = 0.0:
 @export var viewmodel_jump_spring : ValueSpring
 @onready var viewmodel_jump_displacement : float = 0.0
 
+@export var cam_land_spring : ValueSpring
+@onready var cam_land_displacement : float = 0.0
+
 @export_group("Light")
 ## Whether the flashlight is on or not.
 @export var light_on : bool = true:
@@ -96,6 +99,7 @@ func _ready() -> void:
 	viewmodel_spring.reset_spring(Vector2.ZERO)
 	viewmodel_recoil_spring.reset_spring(Vector2.ZERO)
 	viewmodel_jump_spring.reset_spring(0.0)
+	cam_land_spring.reset_spring(0.0)
 	
 	ui.player_camera = camera
 	
@@ -127,18 +131,20 @@ func _physics_process(delta: float) -> void:
 	
 	# View bob
 	bob_offset = view_bob(bob_amount)
+	#print(cam_land_displacement)
 	if is_on_floor() and was_aerial:
-		var clamped_velo_displacement := clampf(inverse_lerp(0.0, -50, prev_velocity.y), 0.0, 1.0)
-		viewmodel_jump_displacement = viewmodel_jump_spring.update(delta, lerpf(-0.1, -1.5, clamped_velo_displacement), lerpf(1.0, 2.0, clamped_velo_displacement))
+		var clamped_velo_displacement := clampf(inverse_lerp(0.0, -70, prev_velocity.y), 0.0, 1.0)
+		viewmodel_jump_displacement = viewmodel_jump_spring.update(delta, lerpf(-0.1, -2.0, clamped_velo_displacement), lerpf(1.0, 2.0, clamped_velo_displacement))
+		cam_land_displacement = cam_land_spring.update(delta, lerpf(0.005, 2.0, clamped_velo_displacement), lerpf(0.5, 1.0, clamped_velo_displacement))
 	if is_on_floor() && (velocity*Vector3(1, 0, 1)).length() > 0.1:
 		# Multiplying by a flat Vector3 ignores vertical speed
 		bob_interp_factor += (delta*0.75) * (velocity*Vector3(1, 0, 1)).length() * float(is_on_floor())
 		bob_amount += delta * (velocity*Vector3(1, 0, 1)).length() * float(is_on_floor())
-		camera.position = camera_start_pos + ((bob_offset*5)*bob_interp_factor)*current_speed_anim_factor
+		camera.position = (camera_start_pos+Vector3(0, cam_land_displacement, 0)) + ((bob_offset*5)*bob_interp_factor)*current_speed_anim_factor
 		viewmodel.global_position = viewmodel_base.global_position - (((camera.global_basis.x * bob_offset.x) + (camera.global_basis.y * bob_offset.y))*bob_interp_factor)
 	else:
 		bob_interp_factor -= delta
-		camera.position = camera.position.lerp(camera_start_pos, delta * bob_return_strength)
+		camera.position = camera.position.lerp((camera_start_pos+Vector3(0, cam_land_displacement, 0)), delta * bob_return_strength) - Vector3(0, cam_land_displacement, 0)
 		viewmodel.global_position = viewmodel.global_position.lerp(viewmodel_base.global_position, delta * bob_return_strength)
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -177,8 +183,9 @@ func _unhandled_input(event: InputEvent) -> void:
 func _process(delta:float) -> void:
 	var dir_vec2 = viewmodel_spring.update(delta, Vector2(viewmodel_sway_dir.x, viewmodel_sway_dir.y), -Vector2(viewmodel_sway_dir.x, viewmodel_sway_dir.y)*8.0)
 	viewmodel_sway_dir = Vector3(dir_vec2.x, dir_vec2.y, 0)
-	viewmodel_recoil = viewmodel_recoil_spring.update(get_process_delta_time(), viewmodel_recoil*0.6, -viewmodel_recoil*5)
-	viewmodel_jump_displacement = viewmodel_jump_spring.update(get_process_delta_time(), 0.0, 1.0)
+	viewmodel_recoil = viewmodel_recoil_spring.update(delta, viewmodel_recoil*0.6, -viewmodel_recoil*5)
+	viewmodel_jump_displacement = viewmodel_jump_spring.update(delta, 0.0, 1.0)
+	cam_land_displacement = cam_land_spring.update(delta, 0.0, 0.05)
 	vm_sway.rotation.y = (-viewmodel_sway_dir.x*14) + viewmodel_recoil.x
 	vm_sway.rotation.x = (-viewmodel_sway_dir.y*14) + viewmodel_recoil.y + viewmodel_jump_displacement
 	vm_sway.rotation.z = (viewmodel_sway_dir.x*17) * camera.global_basis.z.y
@@ -194,7 +201,8 @@ func move(in_dir: Vector2, delta: float) -> void:
 	# The movement direction and speed
 	var direction := (transform.basis * Vector3(in_dir.x, 0, in_dir.y))
 	var target := direction * max_speed
-	var rate := acceleration if direction != Vector3.ZERO else deceleration
+	var rate := acceleration if !direction.is_zero_approx() else deceleration
+	rate = rate if is_on_floor() or !direction.is_zero_approx() else rate / air_acceleration_div
 	
 	var vec_movement_speed_factor := (get_position_delta() - get_platform_velocity()) / delta
 	var len_movement_speed_factor := vec_movement_speed_factor.length()
