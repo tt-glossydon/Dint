@@ -170,6 +170,9 @@ func move(in_dir: Vector2, delta: float) -> void:
 func mouse_rotate(rot: Vector2) -> void:
 	rotate_y(-rot.x)
 	camera.rotate_x(-rot.y)
+	if is_equal_approx(camera.rotation.x + rot.y, deg_to_rad(pitch_clamp_angle)) or is_equal_approx(camera.rotation.x + rot.y, deg_to_rad(-pitch_clamp_angle)):
+		rot *= Vector2(1, 0)
+	# Variant, cannot be strictly typed. A limitation of ValueSpring's flexibility.
 	var dir_vec2 = viewmodel_spring.update(get_process_delta_time(), Vector2(viewmodel_sway_dir.x, viewmodel_sway_dir.y), rot)
 	if dir_vec2 == null:
 		viewmodel_spring._previousValue = Vector2.ZERO
@@ -177,14 +180,12 @@ func mouse_rotate(rot: Vector2) -> void:
 		viewmodel_spring.reset_spring(Vector2.ZERO)
 		dir_vec2 = Vector2.ZERO
 	viewmodel_sway_dir = Vector3(dir_vec2.x, dir_vec2.y, 0)
-	#print(viewmodel_sway_dir)
 	camera.rotation.x = clampf(
 		camera.rotation.x,
 		deg_to_rad(-pitch_clamp_angle),
 		deg_to_rad(pitch_clamp_angle))
 
 func recoil_viewmodel() -> void:
-	print("Joe")
 	var vec := Vector2(randf_range(-1.0, 0.5), randf_range(0.86, 1.75))
 	viewmodel_recoil = viewmodel_recoil_spring.update(get_process_delta_time()*6, vec*0.2, vec)
 
