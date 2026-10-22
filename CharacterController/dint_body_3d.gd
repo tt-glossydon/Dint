@@ -96,6 +96,7 @@ var bob_interp_factor: float = 0.0:
 @export var ammo : int = 8
 
 func _enter_tree() -> void:
+	# Sync multiplayer authority (It's not a given)
 	set_multiplayer_authority(name.to_int())
 	$MultiplayerSynchronizer.set_multiplayer_authority(int(str(name)))
 
@@ -262,6 +263,7 @@ func _on_toggle_light(to_what:bool) -> void:
 func is_idle() -> bool:
 	return animtree_vm.get("parameters/Transition/current_state") == "Idle"
 
+## Fires the weapon on the server and replicates the visuals
 @rpc("any_peer", "call_local", "reliable")
 func weapon_fire() -> void:
 	if !multiplayer.is_server():
@@ -277,6 +279,7 @@ func weapon_fire() -> void:
 	ammo -= 1
 	multicast_weapon_fire.rpc()
 
+## The visual replication for the local player and remote clients for firing
 @rpc("any_peer", "call_local", "reliable")
 func multicast_weapon_fire() -> void:
 	var sender = multiplayer.get_remote_sender_id()
@@ -290,6 +293,7 @@ func multicast_weapon_fire() -> void:
 		animtree_vm.set("parameters/OS_Shoot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 		animtree_vm.set("parameters/OS_ShootAdd/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 
+## Reloads the weapon on the server
 @rpc("any_peer", "call_local", "reliable")
 func weapon_reload() -> void:
 	if !multiplayer.is_server():
@@ -304,6 +308,7 @@ func weapon_reload() -> void:
 	ammo = 8
 	multicast_weapon_reload.rpc()
 
+## The replicated visual for reloading
 @rpc("any_peer", "call_local", "reliable")
 func multicast_weapon_reload() -> void:
 	var sender = multiplayer.get_remote_sender_id()
