@@ -95,10 +95,9 @@ var bob_interp_factor: float = 0.0:
 
 @export var ammo : int = 8
 
-func _enter_tree() -> void:
-	$MultiplayerSynchronizer.set_multiplayer_authority(get_multiplayer_authority())
-
 func _ready() -> void:
+	$MultiplayerSynchronizer.set_multiplayer_authority(int(str(name)))
+	
 	viewmodel_spring._previousValue = Vector2.ZERO
 	viewmodel_spring._currentValue = Vector2.ZERO
 	viewmodel_spring.reset_spring(Vector2.ZERO)

@@ -14,8 +14,6 @@ func _unhandled_input(event:InputEvent):
 ## Networked level changing
 @rpc("authority", "call_local", "reliable")
 func change_level(path: String) -> void:
-	if !multiplayer.is_server():
-		return
 	
 	get_tree().change_scene_to_file(path)
 	while get_tree().current_scene == null or get_tree().current_scene.scene_file_path != path:
@@ -33,7 +31,6 @@ func find_spawn_pos() -> Vector3:
 	return Vector3(0, 0, 0)
 
 ## Networked spawning in all players with networked player ids
-@rpc("authority", "call_local", "reliable")
 func spawn_players():
 	if !multiplayer.is_server():
 		return
