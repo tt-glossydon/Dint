@@ -256,7 +256,7 @@ func _on_toggle_light(to_what:bool) -> void:
 @rpc("any_peer", "call_local", "reliable")
 func weapon_fire() -> void:
 	if multiplayer.is_server():
-		multicast_weapon_fire()
+		multicast_weapon_fire.rpc()
 
 @rpc("authority", "call_local", "reliable")
 func multicast_weapon_fire() -> void:
@@ -273,7 +273,7 @@ func multicast_weapon_fire() -> void:
 @rpc("any_peer", "call_local", "reliable")
 func weapon_reload() -> void:
 	if multiplayer.is_server():
-		multicast_weapon_reload()
+		multicast_weapon_reload.rpc()
 
 @rpc("authority", "call_local", "reliable")
 func multicast_weapon_reload() -> void:
