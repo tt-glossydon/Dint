@@ -33,8 +33,9 @@ metadata/_custom_type_script = "uid://rxq00uggx7vk"
 
 [sub_resource type="Resource" id="Resource_80fuu"]
 script = ExtResource("2_kotd0")
-frequency = 5.0
-response = 1.25
+frequency = 25.0
+damping = 2.0
+response = 1.0
 metadata/_custom_type_script = "uid://rxq00uggx7vk"
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6158t"]
@@ -203,7 +204,7 @@ spot_range = 16.0
 spot_attenuation = 0.2
 
 [node name="TacLight" type="SpotLight3D" parent="Camera3D" unique_id=2029152839]
-transform = Transform3D(0.9932223, -0.1052837, 0.060385756, 0.100810185, 0.99331534, 0.06488034, -0.06675343, -0.05842029, 0.9949287, 0.1872706, -0.24917519, -0.7922412)
+transform = Transform3D(0.9933848, -0.10183092, 0.062910095, 0.097695254, 0.99395186, 0.059077255, -0.06847125, -0.0528036, 0.9952031, 0.18659237, -0.25391948, -0.7886089)
 light_energy = 0.65
 light_volumetric_fog_energy = 0.5
 light_projector = ExtResource("2_84rtu")
@@ -218,7 +219,7 @@ spot_angle = 30.0
 spot_angle_attenuation = 0.7578593
 
 [node name="MuzzleFlash" type="SpotLight3D" parent="Camera3D" unique_id=384195360]
-transform = Transform3D(0.9932223, -0.1052837, 0.060385756, 0.100810185, 0.99331534, 0.06488034, -0.06675343, -0.05842029, 0.9949287, 0.17828673, -0.18092358, -0.8833804)
+transform = Transform3D(0.9933848, -0.10183092, 0.062910095, 0.097695254, 0.99395186, 0.059077255, -0.06847125, -0.0528036, 0.9952031, 0.17764503, -0.18512869, -0.8793634)
 visible = false
 light_color = Color(1, 0.72866666, 0.26, 1)
 light_energy = 0.0
@@ -271,10 +272,11 @@ ambient_color = Color(0.12, 0.12, 0.12, 1)
 [node name="SpotLight3D4" type="SpotLight3D" parent="Camera3D" unique_id=1347355416]
 transform = Transform3D(1, 0, 0, 0, 0.8868701, 0.46201885, 0, -0.46201885, 0.8868701, 0, 0.12998712, 0.18153343)
 layers = 524288
-light_energy = 0.1
+light_energy = 0.085
 light_specular = 0.1
 light_bake_mode = 0
-spot_range = 1.117
+spot_range = 1.2
+spot_attenuation = 0.1
 spot_angle = 90.0
 
 [node name="SurvivorRigVM_Test" parent="Camera3D" unique_id=221713123 instance=ExtResource("4_i01jy")]
@@ -286,13 +288,13 @@ visible = false
 [node name="Skeleton3D" parent="Camera3D/SurvivorRigVM_Test/rig" parent_id_path=PackedInt32Array(221713123, 357180122) index="1" unique_id=263994075]
 bones/39/rotation = Quaternion(-0.6429488, 0.3519087, 0.39926714, 0.55078393)
 bones/40/position = Vector3(-0.20359887, 1.584749, -0.010700954)
-bones/40/rotation = Quaternion(0.31227502, 0.5045833, 0.70221025, 0.3934222)
+bones/40/rotation = Quaternion(0.30702522, 0.4949457, 0.71465886, 0.38733333)
 bones/40/scale = Vector3(1.0011628, 0.9976785, 1.0011628)
-bones/41/rotation = Quaternion(-1.3143271e-07, 0.07137757, 2.2704552e-07, 0.99744946)
-bones/42/rotation = Quaternion(0.25921392, 0.071513675, -0.019215487, 0.96297705)
+bones/41/rotation = Quaternion(-1.1432627e-08, 0.07055228, -6.6093815e-09, 0.99750817)
+bones/42/rotation = Quaternion(0.2810317, 0.06930457, -0.020309832, 0.9569773)
 bones/42/scale = Vector3(1.0000936, 0.9989708, 1.0009415)
-bones/43/rotation = Quaternion(4.781508e-08, 0.16112068, 5.147886e-08, 0.9869347)
-bones/44/rotation = Quaternion(-0.15273432, 0.16159905, -0.11990043, 0.967565)
+bones/43/rotation = Quaternion(-1.8864834e-07, 0.15915957, 2.3233953e-07, 0.98725295)
+bones/44/rotation = Quaternion(-0.1545884, 0.15928717, -0.1258337, 0.96690017)
 bones/44/scale = Vector3(0.9990375, 1.0019752, 0.9989933)
 bones/45/rotation = Quaternion(0.333913, -0.6824575, 0.13484554, 0.6360586)
 bones/46/rotation = Quaternion(0.43943945, 0.125572, -0.058184113, 0.8875468)
@@ -342,7 +344,7 @@ layers = 524288
 libraries/ShootTest = ExtResource("5_kotd0")
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="Camera3D" unique_id=373789732]
-transform = Transform3D(0.97691613, 0.19039115, -0.10275864, 0.11095403, -0.0355317, 0.99369454, 0.18505251, -0.9800315, -0.05602435, 0.23754582, -0.26521647, -0.52791405)
+transform = Transform3D(0.9776963, 0.18799506, -0.099299096, 0.10648157, -0.03069365, 0.9943087, 0.183442, -0.9807166, -0.050411202, 0.2374166, -0.2716205, -0.524467)
 bone_name = "DEF-hand.R"
 bone_idx = 44
 use_external_skeleton = true
