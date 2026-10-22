@@ -204,7 +204,7 @@ spot_range = 16.0
 spot_attenuation = 0.2
 
 [node name="TacLight" type="SpotLight3D" parent="Camera3D" unique_id=2029152839]
-transform = Transform3D(0.9932859, -0.10474406, 0.060413923, 0.10019225, 0.99332976, 0.06573799, -0.06683676, -0.059264567, 0.99485636, 0.18733567, -0.24774516, -0.7930121)
+transform = Transform3D(0.99326974, -0.10456606, 0.060445413, 0.10031365, 0.99350435, 0.062338, -0.0665107, -0.056050494, 0.9951295, 0.18732125, -0.2531749, -0.79000026)
 light_energy = 0.65
 light_volumetric_fog_energy = 0.5
 light_projector = ExtResource("2_84rtu")
@@ -219,7 +219,7 @@ spot_angle = 30.0
 spot_angle_attenuation = 0.7578593
 
 [node name="MuzzleFlash" type="SpotLight3D" parent="Camera3D" unique_id=384195360]
-transform = Transform3D(0.9932859, -0.10474406, 0.060413923, 0.10019225, 0.99332976, 0.06573799, -0.06683676, -0.059264567, 0.99485636, 0.17838955, -0.17956972, -0.8842078)
+transform = Transform3D(0.99326974, -0.10456606, 0.060445413, 0.10031365, 0.99350435, 0.062338, -0.0665107, -0.056050494, 0.9951295, 0.17838547, -0.18469036, -0.8809806)
 visible = false
 light_color = Color(1, 0.72866666, 0.26, 1)
 light_energy = 0.0
@@ -288,13 +288,13 @@ visible = false
 [node name="Skeleton3D" parent="Camera3D/SurvivorRigVM_Test/rig" parent_id_path=PackedInt32Array(221713123, 303651714) index="1" unique_id=348015796]
 bones/39/rotation = Quaternion(-0.6429488, 0.3519087, 0.39926714, 0.55078393)
 bones/40/position = Vector3(-0.20359887, 1.584749, -0.010700954)
-bones/40/rotation = Quaternion(0.3135211, 0.50687444, 0.69921166, 0.39482388)
+bones/40/rotation = Quaternion(0.30872366, 0.49806124, 0.7106638, 0.3893352)
 bones/40/scale = Vector3(1.0011628, 0.9976785, 1.0011628)
-bones/41/rotation = Quaternion(-5.1680082e-08, 0.072024524, -3.858763e-08, 0.9974029)
-bones/42/rotation = Quaternion(0.25403497, 0.07201658, -0.01893903, 0.9643243)
+bones/41/rotation = Quaternion(-2.2213344e-08, 0.07015145, 5.8222522e-08, 0.9975364)
+bones/42/rotation = Quaternion(0.27342477, 0.07009192, -0.019941289, 0.95912904)
 bones/42/scale = Vector3(1.0000936, 0.9989708, 1.0009415)
-bones/43/rotation = Quaternion(7.567476e-08, 0.16180739, 7.84725e-08, 0.98682237)
-bones/44/rotation = Quaternion(-0.15213169, 0.16219723, -0.11826401, 0.96776116)
+bones/43/rotation = Quaternion(-4.0164008e-07, 0.15960655, 1.8877292e-07, 0.9871807)
+bones/44/rotation = Quaternion(-0.15416566, 0.15990598, -0.1243054, 0.96706325)
 bones/44/scale = Vector3(0.9990375, 1.0019752, 0.9989933)
 bones/45/rotation = Quaternion(0.333913, -0.6824575, 0.13484554, 0.6360586)
 bones/46/rotation = Quaternion(0.43943945, 0.125572, -0.058184113, 0.8875468)
@@ -344,7 +344,7 @@ layers = 524288
 libraries/ShootTest = ExtResource("5_kotd0")
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="Camera3D" unique_id=373789732]
-transform = Transform3D(0.9769832, 0.19038093, -0.1022188, 0.11057088, -0.036516905, 0.9937097, 0.18495618, -0.97998405, -0.056868993, 0.23760056, -0.26357818, -0.5286758)
+transform = Transform3D(0.97697484, 0.19034672, -0.10204076, 0.10983527, -0.03319463, 0.99387586, 0.18533093, -0.98016036, -0.05365353, 0.23758748, -0.26991355, -0.525699)
 bone_name = "DEF-hand.R"
 bone_idx = 44
 use_external_skeleton = true
