@@ -96,7 +96,6 @@ var bob_interp_factor: float = 0.0:
 @export var ammo : int = 8
 
 func _enter_tree() -> void:
-	print(int(str(name)))
 	$MultiplayerSynchronizer.set_multiplayer_authority(int(str(name)))
 
 func _ready() -> void:

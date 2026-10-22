@@ -14,7 +14,6 @@ func _unhandled_input(event:InputEvent):
 ## Networked level changing
 @rpc("authority", "call_local", "reliable")
 func change_level(path: String) -> void:
-	
 	get_tree().change_scene_to_file(path)
 	while get_tree().current_scene == null or get_tree().current_scene.scene_file_path != path:
 		await get_tree().process_frame
