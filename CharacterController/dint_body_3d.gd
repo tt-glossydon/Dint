@@ -100,6 +100,12 @@ func _enter_tree() -> void:
 	$MultiplayerSynchronizer.set_multiplayer_authority(int(str(name)))
 
 func _ready() -> void:
+	# Create unique springs for each player
+	viewmodel_spring = viewmodel_spring.duplicate()
+	viewmodel_recoil_spring = viewmodel_recoil_spring.duplicate()
+	viewmodel_jump_spring = viewmodel_jump_spring.duplicate()
+	cam_land_spring = cam_land_spring.duplicate()
+	
 	viewmodel_spring._previousValue = Vector2.ZERO
 	viewmodel_spring._currentValue = Vector2.ZERO
 	viewmodel_spring.reset_spring(Vector2.ZERO)
@@ -279,6 +285,10 @@ func multicast_weapon_fire() -> void:
 	if is_multiplayer_authority():
 		animtree_vm.set("parameters/OS_Shoot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 		animtree_vm.set("parameters/OS_ShootAdd/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+	else:
+		# World view
+		animtree_vm.set("parameters/OS_Shoot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+		animtree_vm.set("parameters/OS_ShootAdd/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 
 @rpc("any_peer", "call_local", "reliable")
 func weapon_reload() -> void:
@@ -302,4 +312,6 @@ func multicast_weapon_reload() -> void:
 	
 	if is_multiplayer_authority():
 		animtree_vm.set("parameters/Transition/transition_request", "Reload")
-		
+	else:
+		# World view
+		animtree_vm.set("parameters/Transition/transition_request", "Reload")
