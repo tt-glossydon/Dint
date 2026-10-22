@@ -78,6 +78,9 @@ var bob_interp_factor: float = 0.0:
 
 @export var cam_land_spring : ValueSpring
 @onready var cam_land_displacement : float = 0.0
+@onready var cam_land_jeopardy_timer : float = 0.0:
+	set(to_what):
+		cam_land_jeopardy_timer = maxf(to_what, 0.0)
 
 @export_group("Light")
 ## Whether the flashlight is on or not.
@@ -89,7 +92,6 @@ var bob_interp_factor: float = 0.0:
 				light.visible = to_what
 ## The lights to toggle on or off.
 @export var lights_to_toggle : Array[Light3D]
-
 
 var ammo : int = 8
 
@@ -133,9 +135,12 @@ func _physics_process(delta: float) -> void:
 	bob_offset = view_bob(bob_amount)
 	#print(cam_land_displacement)
 	if is_on_floor() and was_aerial:
-		var clamped_velo_displacement := clampf(inverse_lerp(0.0, -70, prev_velocity.y), 0.0, 1.0)
+		var clamped_velo_displacement := clampf(inverse_lerp(0.0, -60, prev_velocity.y), 0.0, 1.0)
 		viewmodel_jump_displacement = viewmodel_jump_spring.update(delta, lerpf(-0.1, -2.0, clamped_velo_displacement), lerpf(1.0, 2.0, clamped_velo_displacement))
-		cam_land_displacement = cam_land_spring.update(delta, lerpf(0.005, 2.0, clamped_velo_displacement), lerpf(0.5, 1.0, clamped_velo_displacement))
+		#cam_land_spring.reset_spring(0.0)
+		if !cam_land_jeopardy_timer:
+			cam_land_spring.update(delta, lerpf(0.005, 3.0, clamped_velo_displacement), lerpf(0.5, 3.0, clamped_velo_displacement))
+			cam_land_jeopardy_timer = 0.05
 	if is_on_floor() && (velocity*Vector3(1, 0, 1)).length() > 0.1:
 		# Multiplying by a flat Vector3 ignores vertical speed
 		bob_interp_factor += (delta*0.75) * (velocity*Vector3(1, 0, 1)).length() * float(is_on_floor())
@@ -181,11 +186,13 @@ func _unhandled_input(event: InputEvent) -> void:
 		pass
 
 func _process(delta:float) -> void:
+	cam_land_jeopardy_timer -= delta
+	await RenderingServer.frame_pre_draw
 	var dir_vec2 = viewmodel_spring.update(delta, Vector2(viewmodel_sway_dir.x, viewmodel_sway_dir.y), -Vector2(viewmodel_sway_dir.x, viewmodel_sway_dir.y)*8.0)
 	viewmodel_sway_dir = Vector3(dir_vec2.x, dir_vec2.y, 0)
 	viewmodel_recoil = viewmodel_recoil_spring.update(delta, viewmodel_recoil*0.6, -viewmodel_recoil*5)
 	viewmodel_jump_displacement = viewmodel_jump_spring.update(delta, 0.0, 1.0)
-	cam_land_displacement = cam_land_spring.update(delta, 0.0, 0.05)
+	cam_land_displacement = cam_land_spring.update(delta, 0.0, 0.005)
 	vm_sway.rotation.y = (-viewmodel_sway_dir.x*14) + viewmodel_recoil.x
 	vm_sway.rotation.x = (-viewmodel_sway_dir.y*14) + viewmodel_recoil.y + viewmodel_jump_displacement
 	vm_sway.rotation.z = (viewmodel_sway_dir.x*17) * camera.global_basis.z.y
@@ -201,8 +208,10 @@ func move(in_dir: Vector2, delta: float) -> void:
 	# The movement direction and speed
 	var direction := (transform.basis * Vector3(in_dir.x, 0, in_dir.y))
 	var target := direction * max_speed
-	var rate := acceleration if !direction.is_zero_approx() else deceleration
+	var rate := (acceleration + (cam_land_displacement*50.0*int(!walking))) if !direction.is_zero_approx() else deceleration
 	rate = rate if is_on_floor() or !direction.is_zero_approx() else rate / air_acceleration_div
+	if walking and !is_on_floor() and !direction.is_zero_approx():
+		rate /= 2.0
 	
 	var vec_movement_speed_factor := (get_position_delta() - get_platform_velocity()) / delta
 	var len_movement_speed_factor := vec_movement_speed_factor.length()
@@ -212,7 +221,7 @@ func move(in_dir: Vector2, delta: float) -> void:
 	# The new velocity
 	var tmp_velocity := Vector3(velocity.x, 0, velocity.z)
 	tmp_velocity = tmp_velocity.move_toward(target, rate * delta)
-	tmp_velocity = tmp_velocity.limit_length(max_speed)
+	tmp_velocity = tmp_velocity.limit_length(max_input_speed)
 	
 	velocity.x = tmp_velocity.x
 	velocity.z = tmp_velocity.z
