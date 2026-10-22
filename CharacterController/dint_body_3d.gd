@@ -93,7 +93,7 @@ var bob_interp_factor: float = 0.0:
 ## The lights to toggle on or off.
 @export var lights_to_toggle : Array[Light3D]
 
-var ammo : int = 8
+@export var ammo : int = 8
 
 func _ready() -> void:
 	viewmodel_spring._previousValue = Vector2.ZERO
@@ -164,22 +164,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_released("move_walk"):
 		walking = false
 	elif event.is_action_pressed("Shoot"):
-		if animtree_vm.get("parameters/Transition/current_state") == "Idle":
-			if ammo:
-				animtree_vm.set("parameters/OS_Shoot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-				animtree_vm.set("parameters/OS_ShootAdd/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-				ammo -= 1
-				get_window().set_input_as_handled()
-			else:
-				animtree_vm.set("parameters/Transition/transition_request", "Reload")
-				set_deferred("ammo", 8)
-				get_window().set_input_as_handled()
+		weapon_fire.rpc()
 	elif event.is_action_pressed("Reload"):
-		if animtree_vm.get("parameters/Transition/current_state") == "Idle":
-			if ammo < 8:
-				animtree_vm.set("parameters/Transition/transition_request", "Reload")
-				set_deferred("ammo", 8)
-				get_window().set_input_as_handled()
+		weapon_reload.rpc()
 	elif event.is_action_pressed("toggle_light"):
 		toggle_light.emit(!light_on)
 		get_window().set_input_as_handled()
@@ -261,3 +248,24 @@ func view_bob(time: float) -> Vector3:
 
 func _on_toggle_light(to_what:bool) -> void:
 	light_on = to_what
+
+@rpc("authority", "call_local", "reliable")
+func weapon_fire() -> void:
+	if animtree_vm.get("parameters/Transition/current_state") == "Idle":
+		if ammo:
+			animtree_vm.set("parameters/OS_Shoot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+			animtree_vm.set("parameters/OS_ShootAdd/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+			ammo -= 1
+			get_window().set_input_as_handled()
+		else:
+			weapon_reload.rpc()
+	
+
+@rpc("authority", "call_local", "reliable")
+func weapon_reload() -> void:
+	if animtree_vm.get("parameters/Transition/current_state") == "Idle":
+		if ammo < 8:
+			animtree_vm.set("parameters/Transition/transition_request", "Reload")
+			ammo = 8
+			get_window().set_input_as_handled()
+		
