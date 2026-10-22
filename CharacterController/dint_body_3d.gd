@@ -249,23 +249,34 @@ func view_bob(time: float) -> Vector3:
 func _on_toggle_light(to_what:bool) -> void:
 	light_on = to_what
 
-@rpc("authority", "call_local", "reliable")
+@rpc("any_peer", "call_local", "reliable")
 func weapon_fire() -> void:
-	if animtree_vm.get("parameters/Transition/current_state") == "Idle":
-		if ammo:
-			animtree_vm.set("parameters/OS_Shoot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-			animtree_vm.set("parameters/OS_ShootAdd/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-			ammo -= 1
-			get_window().set_input_as_handled()
-		else:
-			weapon_reload.rpc()
-	
+	if multiplayer.is_server():
+		multicast_weapon_fire()
 
 @rpc("authority", "call_local", "reliable")
+func multicast_weapon_fire() -> void:
+	if animtree_vm.get("parameters/Transition/current_state") == "Idle":
+		if ammo:
+			ammo -= 1
+			if is_multiplayer_authority():
+				animtree_vm.set("parameters/OS_Shoot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+				animtree_vm.set("parameters/OS_ShootAdd/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+				get_window().set_input_as_handled()
+		else:
+			weapon_reload.rpc()
+
+@rpc("any_peer", "call_local", "reliable")
 func weapon_reload() -> void:
+	if multiplayer.is_server():
+		multicast_weapon_reload()
+
+@rpc("authority", "call_local", "reliable")
+func multicast_weapon_reload() -> void:
 	if animtree_vm.get("parameters/Transition/current_state") == "Idle":
 		if ammo < 8:
-			animtree_vm.set("parameters/Transition/transition_request", "Reload")
 			ammo = 8
-			get_window().set_input_as_handled()
+			if is_multiplayer_authority():
+				animtree_vm.set("parameters/Transition/transition_request", "Reload")
+				get_window().set_input_as_handled()
 		
