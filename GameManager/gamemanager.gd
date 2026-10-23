@@ -3,6 +3,9 @@ extends Node3D
 var lobby_id: int = -1
 var peer := SteamMultiplayerPeer.new()
 
+func _ready() -> void:
+	multiplayer.peer_disconnected.connect(_on_player_disconnected)
+
 func _unhandled_input(event:InputEvent):
 	# Toggles the fullscreen
 	if event.is_action_pressed("toggle_fullscreen"):
@@ -10,6 +13,10 @@ func _unhandled_input(event:InputEvent):
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 		else:
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+
+func _on_player_disconnected(id: int):
+	var player = get_node("./" + str(id))
+	player.queue_free()
 
 ## Networked level changing
 @rpc("authority", "call_local", "reliable")
