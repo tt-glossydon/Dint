@@ -4,3 +4,7 @@
 
 [node name="Gamemanager" type="Node3D" unique_id=374231380]
 script = ExtResource("1_ffl1o")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1886351109]
+_spawnable_scenes = PackedStringArray("uid://clyv1thwucfq")
+spawn_path = NodePath("..")

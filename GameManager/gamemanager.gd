@@ -30,8 +30,10 @@ func find_spawn_pos() -> Vector3:
 	return Vector3(0, 0, 0)
 
 ## Networked spawning in all players with networked player ids
-@rpc("authority", "call_local", "reliable")
 func spawn_players():
+	if !multiplayer.is_server():
+		return
+	
 	var p_ids = [multiplayer.get_unique_id()]
 	p_ids.append_array(multiplayer.get_peers())
 	p_ids.sort()

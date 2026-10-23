@@ -93,9 +93,20 @@ var bob_interp_factor: float = 0.0:
 ## The lights to toggle on or off.
 @export var lights_to_toggle : Array[Light3D]
 
-var ammo : int = 8
+@export var ammo : int = 8
+
+func _enter_tree() -> void:
+	# Sync multiplayer authority (It's not a given)
+	set_multiplayer_authority(name.to_int())
+	$MultiplayerSynchronizer.set_multiplayer_authority(int(str(name)))
 
 func _ready() -> void:
+	# Create unique springs for each player
+	viewmodel_spring = viewmodel_spring.duplicate()
+	viewmodel_recoil_spring = viewmodel_recoil_spring.duplicate()
+	viewmodel_jump_spring = viewmodel_jump_spring.duplicate()
+	cam_land_spring = cam_land_spring.duplicate()
+	
 	viewmodel_spring._previousValue = Vector2.ZERO
 	viewmodel_spring._currentValue = Vector2.ZERO
 	viewmodel_spring.reset_spring(Vector2.ZERO)
@@ -163,23 +174,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		walking = true
 	elif event.is_action_released("move_walk"):
 		walking = false
-	elif event.is_action_pressed("Shoot"):
-		if animtree_vm.get("parameters/Transition/current_state") == "Idle":
-			if ammo:
-				animtree_vm.set("parameters/OS_Shoot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-				animtree_vm.set("parameters/OS_ShootAdd/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-				ammo -= 1
-				get_window().set_input_as_handled()
-			else:
-				animtree_vm.set("parameters/Transition/transition_request", "Reload")
-				set_deferred("ammo", 8)
-				get_window().set_input_as_handled()
-	elif event.is_action_pressed("Reload"):
-		if animtree_vm.get("parameters/Transition/current_state") == "Idle":
-			if ammo < 8:
-				animtree_vm.set("parameters/Transition/transition_request", "Reload")
-				set_deferred("ammo", 8)
-				get_window().set_input_as_handled()
+	elif event.is_action_pressed("Shoot") && is_idle():
+		weapon_fire.rpc_id(1)
+	elif event.is_action_pressed("Reload") && is_idle():
+		weapon_reload.rpc_id(1)
 	elif event.is_action_pressed("toggle_light"):
 		toggle_light.emit(!light_on)
 		get_window().set_input_as_handled()
@@ -261,3 +259,64 @@ func view_bob(time: float) -> Vector3:
 
 func _on_toggle_light(to_what:bool) -> void:
 	light_on = to_what
+
+func is_idle() -> bool:
+	return animtree_vm.get("parameters/Transition/current_state") == "Idle"
+
+## Fires the weapon on the server and replicates the visuals
+@rpc("any_peer", "call_local", "reliable")
+func weapon_fire() -> void:
+	if !multiplayer.is_server():
+		return
+	
+	var sender = multiplayer.get_remote_sender_id()
+	if sender != 0 && sender != get_multiplayer_authority():
+		return
+	
+	if ammo <= 0:
+		weapon_reload()
+		return
+	ammo -= 1
+	multicast_weapon_fire.rpc()
+
+## The visual replication for the local player and remote clients for firing
+@rpc("any_peer", "call_local", "reliable")
+func multicast_weapon_fire() -> void:
+	var sender = multiplayer.get_remote_sender_id()
+	if sender != 1 && sender != 0:
+		return
+	if is_multiplayer_authority():
+		animtree_vm.set("parameters/OS_Shoot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+		animtree_vm.set("parameters/OS_ShootAdd/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+	else:
+		# World view
+		animtree_vm.set("parameters/OS_Shoot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+		animtree_vm.set("parameters/OS_ShootAdd/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+
+## Reloads the weapon on the server
+@rpc("any_peer", "call_local", "reliable")
+func weapon_reload() -> void:
+	if !multiplayer.is_server():
+		return
+	
+	var sender = multiplayer.get_remote_sender_id()
+	if sender != 0 && sender != get_multiplayer_authority():
+		return
+	
+	if ammo >= 8:
+		return
+	ammo = 8
+	multicast_weapon_reload.rpc()
+
+## The replicated visual for reloading
+@rpc("any_peer", "call_local", "reliable")
+func multicast_weapon_reload() -> void:
+	var sender = multiplayer.get_remote_sender_id()
+	if sender != 1 && sender != 0:
+		return
+	
+	if is_multiplayer_authority():
+		animtree_vm.set("parameters/Transition/transition_request", "Reload")
+	else:
+		# World view
+		animtree_vm.set("parameters/Transition/transition_request", "Reload")
