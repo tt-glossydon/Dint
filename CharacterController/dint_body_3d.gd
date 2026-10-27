@@ -175,9 +175,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_released("move_walk"):
 		walking = false
 	elif event.is_action_pressed("Shoot") && is_idle():
-		weapon_fire.rpc_id(1)
+		weapon_fire.rpc()
 	elif event.is_action_pressed("Reload") && is_idle():
-		weapon_reload.rpc_id(1)
+		weapon_reload.rpc()
 	elif event.is_action_pressed("toggle_light"):
 		toggle_light.emit(!light_on)
 		get_window().set_input_as_handled()
@@ -266,6 +266,8 @@ func is_idle() -> bool:
 ## Fires the weapon on the server and replicates the visuals
 @rpc("any_peer", "call_local", "reliable")
 func weapon_fire() -> void:
+	print("Firing")
+	print("Ammo is " + str(ammo))
 	if is_multiplayer_authority() && ammo != 0:
 		print("Ammo " + str(ammo))
 		animtree_vm.set("parameters/OS_Shoot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
