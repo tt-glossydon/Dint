@@ -266,8 +266,13 @@ func is_idle() -> bool:
 ## Fires the weapon on the server and replicates the visuals
 @rpc("any_peer", "call_local", "reliable")
 func weapon_fire() -> void:
+	if is_multiplayer_authority() && ammo != 0:
+		print("Ammo " + str(ammo))
+		animtree_vm.set("parameters/OS_Shoot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+		animtree_vm.set("parameters/OS_ShootAdd/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+		
 	if !multiplayer.is_server():
-		print(ammo)
+		return
 	
 	var sender = multiplayer.get_remote_sender_id()
 	if sender != 0 && sender != get_multiplayer_authority():
@@ -285,10 +290,7 @@ func multicast_weapon_fire() -> void:
 	var sender = multiplayer.get_remote_sender_id()
 	if sender != 1 && sender != 0:
 		return
-	if is_multiplayer_authority():
-		animtree_vm.set("parameters/OS_Shoot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-		animtree_vm.set("parameters/OS_ShootAdd/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-	else:
+	if !is_multiplayer_authority():
 		# World view
 		animtree_vm.set("parameters/OS_Shoot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 		animtree_vm.set("parameters/OS_ShootAdd/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
