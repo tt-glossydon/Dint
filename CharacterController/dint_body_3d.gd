@@ -267,7 +267,7 @@ func is_idle() -> bool:
 @rpc("any_peer", "call_local", "reliable")
 func weapon_fire() -> void:
 	if !multiplayer.is_server():
-		return
+		print(ammo)
 	
 	var sender = multiplayer.get_remote_sender_id()
 	if sender != 0 && sender != get_multiplayer_authority():
