@@ -282,11 +282,12 @@ func weapon_fire() -> void:
 		weapon_reload()
 		return
 	ammo -= 1
-	multicast_weapon_fire.rpc()
+	multicast_weapon_fire.rpc(ammo)
 
 ## The visual replication for the local player and remote clients for firing
 @rpc("any_peer", "call_local", "reliable")
-func multicast_weapon_fire() -> void:
+func multicast_weapon_fire(new_ammo: int) -> void:
+	ammo = new_ammo
 	var sender = multiplayer.get_remote_sender_id()
 	if sender != 1 && sender != 0:
 		return
