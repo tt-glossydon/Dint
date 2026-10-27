@@ -6,13 +6,13 @@ func _ready() -> void:
 	Steam.lobby_created.connect(_on_lobby_created)
 	Steam.lobby_match_list.connect(_on_lobby_match_list)
 	Steam.lobby_joined.connect(_on_lobby_joined)
-	multiplayer.peer_connected.connect(func(id): print("Client connected"))
+	multiplayer.peer_connected.connect(func(_id): print("Client connected"))
 
 ## Call the lobby to be created
 func _on_create_server_pressed() -> void:
 	if Gamemanager.lobby_id != -1:
 		if multiplayer.is_server():
-			Gamemanager.change_level.rpc("res://dtest.tscn")
+			Gamemanager.change_level.rpc("res://MapTest/MAPTEST-thefacility_2.scn")
 	else:
 		var lobby_type: Steam.LobbyType = Steam.LobbyType.LOBBY_TYPE_PUBLIC
 		Steam.createLobby(lobby_type, 3)

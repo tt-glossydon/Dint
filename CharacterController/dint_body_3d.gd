@@ -93,7 +93,10 @@ var bob_interp_factor: float = 0.0:
 ## The lights to toggle on or off.
 @export var lights_to_toggle : Array[Light3D]
 
+@export_group("Weapons")
 @export var ammo : int = 8
+@export var current_weapon_idx : int = 0
+@export var weapons : Array[WeaponStats]
 
 func _enter_tree() -> void:
 	# Sync multiplayer authority (It's not a given)
