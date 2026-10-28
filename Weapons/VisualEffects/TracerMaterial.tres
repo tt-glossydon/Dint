@@ -1,0 +1,16 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://dviufdxk2mjyj"]
+
+[resource]
+cull_mode = 2
+shading_mode = 2
+diffuse_mode = 2
+specular_mode = 2
+albedo_color = Color(1, 0.75, 0, 1)
+emission_enabled = true
+emission = Color(1, 0.6666667, 0, 1)
+emission_energy_multiplier = 4.0
+texture_filter = 0
+disable_receive_shadows = true
+distance_fade_mode = 2
+distance_fade_min_distance = 0.07
+distance_fade_max_distance = 0.2
