@@ -12,7 +12,7 @@ func _ready() -> void:
 func _on_create_server_pressed() -> void:
 	if Gamemanager.lobby_id != -1:
 		if multiplayer.is_server():
-			Gamemanager.change_level.rpc("res://dtest.tscn")
+			Gamemanager.change_level.rpc("res://MapTest/MAPTEST-thefacility_2.scn")#("res://dtest.tscn")
 	else:
 		var lobby_type: Steam.LobbyType = Steam.LobbyType.LOBBY_TYPE_PUBLIC
 		Steam.createLobby(lobby_type, 3)
