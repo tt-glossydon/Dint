@@ -175,9 +175,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_released("move_walk"):
 		walking = false
 	elif event.is_action_pressed("Shoot") && is_idle():
-		weapon_fire.rpc_id(1)
+		weapon_fire.rpc()
 	elif event.is_action_pressed("Reload") && is_idle():
-		weapon_reload.rpc_id(1)
+		weapon_reload.rpc()
 	elif event.is_action_pressed("toggle_light"):
 		toggle_light.emit(!light_on)
 		get_window().set_input_as_handled()
@@ -266,6 +266,10 @@ func is_idle() -> bool:
 ## Fires the weapon on the server and replicates the visuals
 @rpc("any_peer", "call_local", "reliable")
 func weapon_fire() -> void:
+	if is_multiplayer_authority() && ammo != 0:
+		animtree_vm.set("parameters/OS_Shoot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+		animtree_vm.set("parameters/OS_ShootAdd/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+		
 	if !multiplayer.is_server():
 		return
 	
@@ -277,18 +281,16 @@ func weapon_fire() -> void:
 		weapon_reload()
 		return
 	ammo -= 1
-	multicast_weapon_fire.rpc()
+	multicast_weapon_fire.rpc(ammo)
 
 ## The visual replication for the local player and remote clients for firing
 @rpc("any_peer", "call_local", "reliable")
-func multicast_weapon_fire() -> void:
+func multicast_weapon_fire(new_ammo: int) -> void:
+	ammo = new_ammo
 	var sender = multiplayer.get_remote_sender_id()
 	if sender != 1 && sender != 0:
 		return
-	if is_multiplayer_authority():
-		animtree_vm.set("parameters/OS_Shoot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-		animtree_vm.set("parameters/OS_ShootAdd/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-	else:
+	if !is_multiplayer_authority():
 		# World view
 		animtree_vm.set("parameters/OS_Shoot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 		animtree_vm.set("parameters/OS_ShootAdd/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
@@ -296,6 +298,9 @@ func multicast_weapon_fire() -> void:
 ## Reloads the weapon on the server
 @rpc("any_peer", "call_local", "reliable")
 func weapon_reload() -> void:
+	if is_multiplayer_authority() && ammo < 8:
+		animtree_vm.set("parameters/Transition/transition_request", "Reload")
+	
 	if !multiplayer.is_server():
 		return
 	
@@ -306,17 +311,16 @@ func weapon_reload() -> void:
 	if ammo >= 8:
 		return
 	ammo = 8
-	multicast_weapon_reload.rpc()
+	multicast_weapon_reload.rpc(ammo)
 
 ## The replicated visual for reloading
 @rpc("any_peer", "call_local", "reliable")
-func multicast_weapon_reload() -> void:
+func multicast_weapon_reload(new_ammo: int) -> void:
+	ammo = new_ammo
 	var sender = multiplayer.get_remote_sender_id()
 	if sender != 1 && sender != 0:
 		return
 	
-	if is_multiplayer_authority():
-		animtree_vm.set("parameters/Transition/transition_request", "Reload")
-	else:
+	if !is_multiplayer_authority():
 		# World view
 		animtree_vm.set("parameters/Transition/transition_request", "Reload")
