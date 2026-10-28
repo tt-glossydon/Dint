@@ -298,7 +298,7 @@ func multicast_weapon_fire(new_ammo: int) -> void:
 ## Reloads the weapon on the server
 @rpc("any_peer", "call_local", "reliable")
 func weapon_reload() -> void:
-	if is_multiplayer_authority():
+	if is_multiplayer_authority() && ammo < 8:
 		animtree_vm.set("parameters/Transition/transition_request", "Reload")
 	
 	if !multiplayer.is_server():
