@@ -93,7 +93,13 @@ var bob_interp_factor: float = 0.0:
 ## The lights to toggle on or off.
 @export var lights_to_toggle : Array[Light3D]
 
+@export_group("Weapons")
 @export var ammo : int = 8
+@export var current_weapon_idx : int = 0
+@export var weapons : Array[WeaponStats]
+
+@onready var tracers : Tracers
+@onready var tracer_origin : Node3D = $Camera3D/MuzzleFlash/BulletOrigin as Node3D
 
 func _enter_tree() -> void:
 	# Sync multiplayer authority (It's not a given)
@@ -123,6 +129,7 @@ func _ready() -> void:
 	set_process_unhandled_input(is_multiplayer_authority())
 	if is_multiplayer_authority():
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	tracers = get_tree().get_first_node_in_group("Tracer") as Tracers
 
 func _physics_process(delta: float) -> void:
 	var input := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
@@ -273,7 +280,7 @@ func weapon_fire() -> void:
 	if !multiplayer.is_server():
 		return
 	
-	var sender = multiplayer.get_remote_sender_id()
+	var sender := multiplayer.get_remote_sender_id()
 	if sender != 0 && sender != get_multiplayer_authority():
 		return
 	
@@ -290,6 +297,7 @@ func multicast_weapon_fire(new_ammo: int) -> void:
 	var sender = multiplayer.get_remote_sender_id()
 	if sender != 1 && sender != 0:
 		return
+	tracers.request_tracer(tracer_origin.global_transform.orthonormalized(), 1.0, 1.0, 250.0, 1.0)
 	if !is_multiplayer_authority():
 		# World view
 		animtree_vm.set("parameters/OS_Shoot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
