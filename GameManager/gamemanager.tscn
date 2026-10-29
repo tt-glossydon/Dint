@@ -1,9 +1,12 @@
 [gd_scene format=3 uid="uid://c0wmmqoimugnv"]
 
 [ext_resource type="Script" uid="uid://by58xlf3u8puo" path="res://GameManager/gamemanager.gd" id="1_ffl1o"]
+[ext_resource type="PackedScene" uid="uid://fy3avcpfnaki" path="res://Weapons/VisualEffects/Tracers.scn" id="2_vhh2y"]
 
 [node name="Gamemanager" type="Node3D" unique_id=374231380]
 script = ExtResource("1_ffl1o")
+
+[node name="Tracers" parent="." unique_id=223597189 instance=ExtResource("2_vhh2y")]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1886351109]
 _spawnable_scenes = PackedStringArray("uid://clyv1thwucfq")

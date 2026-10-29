@@ -6,7 +6,7 @@ func _ready() -> void:
 	Steam.lobby_created.connect(_on_lobby_created)
 	Steam.lobby_match_list.connect(_on_lobby_match_list)
 	Steam.lobby_joined.connect(_on_lobby_joined)
-	multiplayer.peer_connected.connect(func(id): print("Client connected"))
+	multiplayer.peer_connected.connect(func(_id): print("Client connected"))
 
 ## Call the lobby to be created
 func _on_create_server_pressed() -> void:
