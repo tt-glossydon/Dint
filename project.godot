@@ -38,6 +38,10 @@ window/stretch/aspect="expand"
 
 enabled=PackedStringArray("res://addons/godotsteam/plugin.cfg")
 
+[global_group]
+
+Tracer="The node from which to spawn tracers"
+
 [input]
 
 move_left={

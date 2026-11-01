@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="WeaponStats" format=3 uid="uid://0ln4c2gue41s"]
+
+[ext_resource type="Script" uid="uid://4m1ukpk05quk" path="res://Weapons/WeaponStatistics.gd" id="1_ehtxx"]
+
+[sub_resource type="Curve" id="Curve_ehtxx"]
+_limits = [2.0, 6.0, 0.0, 50.0]
+_data = [Vector2(5, 6), 0.0, 0.0, 0, 0, Vector2(50, 2), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_ioukp"]
+_limits = [1.25, 2.0, 0.0, 50.0]
+_data = [Vector2(10, 2), 0.0, 0.0, 0, 0, Vector2(50, 1.25), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_h7bol"]
+_limits = [1.0, 1.25, 0.0, 50.0]
+_data = [Vector2(0, 1.25), 0.0, 0.0, 0, 0, Vector2(50, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[resource]
+script = ExtResource("1_ehtxx")
+weapon_name = "PistolTest"
+recoil_viewmodel = Vector4(-0.5, 0.3, 0.86, 1.75)
+damage_curve = SubResource("Curve_ehtxx")
+torso_multiplier_curve = SubResource("Curve_h7bol")
+head_multiplier_curve = SubResource("Curve_ioukp")
+rpm = 400.0
+metadata/_custom_type_script = "uid://4m1ukpk05quk"
