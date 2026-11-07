@@ -21,6 +21,12 @@ damping = 0.3
 response = 5.0
 metadata/_custom_type_script = "uid://rxq00uggx7vk"
 
+[sub_resource type="Resource" id="Resource_30g2c"]
+script = ExtResource("2_kotd0")
+frequency = 2.0
+response = 0.2
+metadata/_custom_type_script = "uid://rxq00uggx7vk"
+
 [sub_resource type="Resource" id="Resource_ptjcw"]
 script = ExtResource("2_kotd0")
 response = 1.25
@@ -185,6 +191,7 @@ jump_strength = 15.0
 bob_side_amplitude = 0.02
 bob_return_strength = 15.0
 viewmodel_spring = SubResource("Resource_4ekg4")
+camera_recoil_spring = SubResource("Resource_30g2c")
 viewmodel_recoil_spring = SubResource("Resource_ptjcw")
 viewmodel_jump_spring = SubResource("Resource_1ood1")
 cam_land_spring = SubResource("Resource_80fuu")
@@ -207,7 +214,7 @@ spot_range = 16.0
 spot_attenuation = 0.2
 
 [node name="TacLight" type="SpotLight3D" parent="Camera3D" unique_id=2029152839]
-transform = Transform3D(0.9932234, -0.10548188, 0.06011799, 0.100971475, 0.993265, 0.06547981, -0.06656287, -0.059002906, 0.9948956, 0.1873288, -0.24825811, -0.79276377)
+transform = Transform3D(0.9955397, -0.10024884, -0.0028217116, 0.099754676, 0.9926261, 0.075646475, -0.004839095, -0.07589336, 0.9960418, 0.20285442, -0.2528788, -0.79033756)
 light_energy = 0.65
 light_volumetric_fog_energy = 0.5
 light_projector = ExtResource("2_84rtu")
@@ -222,7 +229,7 @@ spot_angle = 30.0
 spot_angle_attenuation = 0.7578593
 
 [node name="MuzzleFlash" type="SpotLight3D" parent="Camera3D" unique_id=384195360]
-transform = Transform3D(0.9932234, -0.10548188, 0.06011799, 0.100971475, 0.993265, 0.06547981, -0.06656287, -0.059002906, 0.9948956, 0.17835358, -0.18006182, -0.88394237)
+transform = Transform3D(0.9955397, -0.10024884, -0.0028217116, 0.099754676, 0.9926261, 0.075646475, -0.004839095, -0.07589336, 0.9960418, 0.19975066, -0.18561912, -0.88261324)
 visible = false
 light_color = Color(1, 0.72866666, 0.26, 1)
 light_energy = 0.0
@@ -294,13 +301,13 @@ visible = false
 [node name="Skeleton3D" parent="Camera3D/SurvivorRigVM_Test/rig" parent_id_path=PackedInt32Array(221713123, 357180122) index="1" unique_id=263994075]
 bones/39/rotation = Quaternion(-0.6429488, 0.3519087, 0.39926714, 0.55078393)
 bones/40/position = Vector3(-0.20359887, 1.584749, -0.010700954)
-bones/40/rotation = Quaternion(0.3131037, 0.5061069, 0.70021814, 0.39435595)
+bones/40/rotation = Quaternion(0.30780816, 0.49638158, 0.712821, 0.38825998)
 bones/40/scale = Vector3(1.0011628, 0.9976785, 1.0011628)
-bones/41/rotation = Quaternion(-9.635375e-08, 0.07168084, 1.0848096e-07, 0.9974277)
-bones/42/rotation = Quaternion(0.25582004, 0.0718441, -0.019034823, 0.96386325)
+bones/41/rotation = Quaternion(6.8157774e-10, 0.07010912, 3.0158473e-09, 0.9975394)
+bones/42/rotation = Quaternion(0.27701128, 0.06972313, -0.020117117, 0.9581226)
 bones/42/scale = Vector3(1.0000936, 0.9989708, 1.0009415)
-bones/43/rotation = Quaternion(6.253777e-08, 0.16145091, 6.6252845e-08, 0.9868808)
-bones/44/rotation = Quaternion(-0.15238997, 0.16194661, -0.1189545, 0.9676779)
+bones/43/rotation = Quaternion(-3.4881398e-07, 0.15918896, 2.4286004e-07, 0.9872482)
+bones/44/rotation = Quaternion(-0.15447226, 0.15946516, -0.1253988, 0.9669459)
 bones/44/scale = Vector3(0.9990375, 1.0019752, 0.9989933)
 bones/45/rotation = Quaternion(0.333913, -0.6824575, 0.13484554, 0.6360586)
 bones/46/rotation = Quaternion(0.43943945, 0.125572, -0.058184113, 0.8875468)
@@ -350,14 +357,14 @@ layers = 524288
 libraries/ShootTest = ExtResource("5_kotd0")
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="Camera3D" unique_id=373789732]
-transform = Transform3D(0.9768507, 0.19065027, -0.10295751, 0.11126064, -0.036071688, 0.9936461, 0.18523036, -0.9799528, -0.056606583, 0.2375402, -0.26413345, -0.52841824)
+transform = Transform3D(0.97702914, 0.1903964, -0.10136237, 0.10903472, -0.032520294, 0.99397993, 0.18549734, -0.98018354, -0.052882798, 0.23765296, -0.271083, -0.5251102)
 bone_name = "DEF-hand.R"
 bone_idx = 44
 use_external_skeleton = true
 external_skeleton = NodePath("../SurvivorRigVM_Test/rig/Skeleton3D")
 
 [node name="Node3D2" type="Node3D" parent="Camera3D/BoneAttachment3D" unique_id=1272555766]
-transform = Transform3D(0.97638243, -0.19903392, 0.08421706, 0.19960526, 0.9798378, 0.0019158125, -0.08295638, 0.014823183, 0.9964646, -0.066957235, 0.24833393, -0.07680178)
+transform = Transform3D(0.9868578, -0.13840322, 0.08366669, 0.1374268, 0.9903171, 0.017452737, -0.085276, -0.005724842, 0.99636, -0.052, 0.248, -0.077)
 
 [node name="PistolTest" parent="Camera3D/BoneAttachment3D/Node3D2" unique_id=1296883580 instance=ExtResource("6_ptjcw")]
 transform = Transform3D(-0.7986872, -2.220446e-16, -0.045603592, -0.045601264, 3.496836e-08, 0.798728, 1.9932977e-09, 0.7999828, -3.491351e-08, -0.031398144, -0.13256297, 0.11535459)

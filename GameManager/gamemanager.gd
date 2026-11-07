@@ -41,13 +41,13 @@ func spawn_players():
 	if !multiplayer.is_server():
 		return
 	
-	var p_ids = [multiplayer.get_unique_id()]
+	var p_ids := [multiplayer.get_unique_id()]
 	p_ids.append_array(multiplayer.get_peers())
 	p_ids.sort()
-	var player_scene = preload("res://CharacterController/dint_body_3d.tscn")
+	var player_scene : PackedScene = preload("res://CharacterController/dint_body_3d.tscn")
 
 	for id in p_ids:
-		var player = player_scene.instantiate()
+		var player := player_scene.instantiate() as CharacterBody3D
 		player.name = str(id)
 		player.position = find_spawn_pos()
 		player.set_multiplayer_authority(id)
