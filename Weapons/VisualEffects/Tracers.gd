@@ -9,6 +9,7 @@ class_name Tracers
 ## The maximum amount of tracer instances which can be drawn.
 const MAX_TRACERS : int = 256
 
+## Index for the current [Tracers.TracerInstance] in [member live_tracers]
 @onready var current_tracer : int = -1:
 	set(to_what):
 		current_tracer = to_what % MAX_TRACERS
@@ -62,9 +63,11 @@ func _ready() -> void:
 		multimesh.instance_count += 1
 		multimesh.set_instance_transform(multimesh.instance_count-1, trans)
 
+## Front-facing method for requesting a tracer's emission.[br]
+## Use this for producing a tracer.
 func request_tracer(origin:Transform3D, length:float = 1.0, width:float = 1.0, speed:float = 60.0, lifetime:float = 1.0) -> void:
 	current_tracer += 1
-	print(current_tracer)
+	#print(current_tracer)
 	var tracer := live_tracers[current_tracer]
 	multimesh.set_instance_transform(current_tracer, origin)
 	tracer.refresh(length, width, speed, lifetime)

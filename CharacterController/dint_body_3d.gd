@@ -5,6 +5,7 @@ signal toggle_light(to_what:bool)
 
 @onready var camera := $Camera3D as Camera3D
 @onready var ui = $DintHud
+@onready var nearest_interactive_prompt : InteractivePrompt3D
 
 ## The mouse sensitivity
 @export var sensitivity: float = 0.001
@@ -70,8 +71,12 @@ var bob_interp_factor: float = 0.0:
 	set(to_what):
 		viewmodel_pull_interp_factor = clampf(to_what, 0.0, 1.0)
 
+@export var camera_recoil_spring : ValueSpring
+@onready var camera_recoil : Vector2 = Vector2.ZERO
+
 @export var viewmodel_recoil_spring : ValueSpring
 @onready var viewmodel_recoil : Vector2 = Vector2.ZERO
+@onready var camera_orientation_before_recoil : Vector3 = Vector3.ZERO
 
 @export var viewmodel_jump_spring : ValueSpring
 @onready var viewmodel_jump_displacement : float = 0.0
@@ -109,6 +114,7 @@ func _enter_tree() -> void:
 func _ready() -> void:
 	# Create unique springs for each player
 	viewmodel_spring = viewmodel_spring.duplicate()
+	camera_recoil_spring = camera_recoil_spring.duplicate()
 	viewmodel_recoil_spring = viewmodel_recoil_spring.duplicate()
 	viewmodel_jump_spring = viewmodel_jump_spring.duplicate()
 	cam_land_spring = cam_land_spring.duplicate()
@@ -117,6 +123,7 @@ func _ready() -> void:
 	viewmodel_spring._currentValue = Vector2.ZERO
 	viewmodel_spring.reset_spring(Vector2.ZERO)
 	viewmodel_recoil_spring.reset_spring(Vector2.ZERO)
+	camera_recoil_spring.reset_spring(Vector2.ZERO)
 	viewmodel_jump_spring.reset_spring(0.0)
 	cam_land_spring.reset_spring(0.0)
 	
@@ -169,6 +176,22 @@ func _physics_process(delta: float) -> void:
 		bob_interp_factor -= delta
 		camera.position = camera.position.lerp((camera_start_pos+Vector3(0, cam_land_displacement, 0)), delta * bob_return_strength) - Vector3(0, cam_land_displacement, 0)
 		viewmodel.global_position = viewmodel.global_position.lerp(viewmodel_base.global_position, delta * bob_return_strength)
+	
+	# Reduce frequency of fetched interactive objects by way of modulo
+	if is_multiplayer_authority() and !(Engine.get_physics_frames() % 10):
+		var _interactive_nodes : Array[Node] = get_tree().get_nodes_in_group(&"Interactive")
+		var _shortest_distance : float = 10.0
+		var _closest_interactive_prompt : InteractivePrompt3D = null
+		for _n in _interactive_nodes:
+			var node := _n as InteractivePrompt3D
+			if !node or !is_instance_valid(node) or node.is_queued_for_deletion():
+				continue
+			var _dist := node.global_position.distance_to(global_position)
+			if _dist < _shortest_distance and node.distance > _dist:
+				_shortest_distance = _dist
+				_closest_interactive_prompt = node
+		nearest_interactive_prompt = _closest_interactive_prompt
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
@@ -189,6 +212,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		toggle_light.emit(!light_on)
 		get_window().set_input_as_handled()
 		pass
+	elif event.is_action_pressed("Interact") and nearest_interactive_prompt:
+		nearest_interactive_prompt.interact_with.rpc(self)
 
 func _process(delta:float) -> void:
 	cam_land_jeopardy_timer -= delta
@@ -196,6 +221,7 @@ func _process(delta:float) -> void:
 	var dir_vec2 = viewmodel_spring.update(delta, Vector2(viewmodel_sway_dir.x, viewmodel_sway_dir.y), -Vector2(viewmodel_sway_dir.x, viewmodel_sway_dir.y)*8.0)
 	viewmodel_sway_dir = Vector3(dir_vec2.x, dir_vec2.y, 0)
 	viewmodel_recoil = viewmodel_recoil_spring.update(delta, viewmodel_recoil*0.6, -viewmodel_recoil*5)
+	camera_recoil = camera_recoil_spring.update(delta, camera_recoil*0.05, -camera_recoil*4.0)
 	viewmodel_jump_displacement = viewmodel_jump_spring.update(delta, 0.0, 1.0)
 	cam_land_displacement = cam_land_spring.update(delta, 0.0, 0.005)
 	vm_sway.rotation.y = (-viewmodel_sway_dir.x*14) + viewmodel_recoil.x
@@ -236,6 +262,7 @@ func move(in_dir: Vector2, delta: float) -> void:
 
 ## Rotate the player and camera
 func mouse_rotate(rot: Vector2) -> void:
+	camera.rotation = camera_orientation_before_recoil
 	rotate_y(-rot.x)
 	camera.rotate_x(-rot.y)
 	if is_equal_approx(camera.rotation.x + rot.y, deg_to_rad(pitch_clamp_angle)) or is_equal_approx(camera.rotation.x + rot.y, deg_to_rad(-pitch_clamp_angle)):
@@ -248,20 +275,25 @@ func mouse_rotate(rot: Vector2) -> void:
 		viewmodel_spring.reset_spring(Vector2.ZERO)
 		dir_vec2 = Vector2.ZERO
 	viewmodel_sway_dir = Vector3(dir_vec2.x, dir_vec2.y, 0)
+	camera_orientation_before_recoil = camera.rotation
 	camera.rotation.x = clampf(
 		camera.rotation.x,
 		deg_to_rad(-pitch_clamp_angle),
 		deg_to_rad(pitch_clamp_angle))
+	camera.rotation.x += camera_recoil.y
+	camera.rotation.y += camera_recoil.x
 
 func recoil_viewmodel() -> void:
 	var vec := Vector2(randf_range(-0.5, 0.3), randf_range(0.86, 1.75))
+	var vec_cam := Vector2(randf_range(-0.05, 0.05), randf_range(0.64, 0.96)) * 0.35
 	viewmodel_recoil = viewmodel_recoil_spring.update(get_process_delta_time()*6, vec*0.2, vec)
+	camera_recoil = camera_recoil_spring.update(get_process_delta_time()*6, vec_cam*0.5, -vec_cam*2)
 
 ## Returns a bob position based on the bob time
 func view_bob(time: float) -> Vector3:
 	var pos := Vector3.ZERO
 	pos.y = sin(time * bob_frequency) * bob_up_amplitude
-	pos.x = cos(time * (bob_frequency / 2.0)) * (bob_side_amplitude / 2.0)
+	pos.x = cos(time * (bob_frequency * 0.5)) * (bob_side_amplitude * 0.5)
 	return pos
 
 func _on_toggle_light(to_what:bool) -> void:
